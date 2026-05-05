@@ -1,0 +1,39 @@
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=fallback');
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+
+
+/* Additional styles */
+@import 'additional-styles/utility-patterns.css';
+@import 'additional-styles/flatpickr.css';
+
+@import 'tailwindcss/utilities';
+
+/* Print-specific styles */
+@media print {
+  body {
+    background-color: white;
+  }
+  .print\:hidden {
+    display: none;
+  }
+  .print\:p-0 {
+    padding: 0;
+  }
+  .print\:shadow-none {
+    box-shadow: none;
+  }
+  .print\:border-none {
+    border: none;
+  }
+  /* Ensure the main content takes up the full page */
+  main, #report-content {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+}
