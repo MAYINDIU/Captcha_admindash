@@ -273,12 +273,20 @@ const UserEditModal = ({ user: summaryUser, onClose }) => {
             <div className="p-4 bg-indigo-50/50 rounded-lg border border-indigo-100">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-sm font-bold text-indigo-900">Captcha Settings</h3>
-                <button 
-                  onClick={() => updateMutation.mutate({ 
-                    endpoint: "captcha-settings", 
-                    method: "PATCH",
-                    body: { captcha_access_enabled: captchaAccess, captcha_limit_per_day: parseInt(captchaLimit) } 
-                  })}
+                <button
+                  onClick={() => {
+                    if (captchaLimit === "" || captchaLimit === null) {
+                      return toast.warning("Daily Limit is required!");
+                    }
+                    updateMutation.mutate({ 
+                      endpoint: "captcha-settings", 
+                      method: "PATCH",
+                      body: {
+                        captcha_access_enabled: captchaAccess,
+                        captcha_limit_per_day: parseInt(captchaLimit),
+                      },
+                    });
+                  }}
                   className="text-xs font-bold text-white bg-indigo-600 px-3 py-1 rounded hover:bg-indigo-700"
                 >
                   Sync Settings
@@ -291,7 +299,13 @@ const UserEditModal = ({ user: summaryUser, onClose }) => {
                 </label>
                 <div className="flex items-center space-x-2">
                   <span className="text-[10px] font-bold text-gray-500 uppercase">Daily Limit</span>
-                  <input type="number" value={captchaLimit} onChange={(e) => setCaptchaLimit(e.target.value)} className="w-16 p-1 border rounded text-xs" />
+                  <input
+                    type="number"
+                    value={captchaLimit}
+                    onChange={(e) => setCaptchaLimit(e.target.value)}
+                    className="w-16 p-1 border rounded text-xs"
+                    required // Make the daily limit mandatory
+                  />
                 </div>
               </div>
              </div>
@@ -302,7 +316,13 @@ const UserEditModal = ({ user: summaryUser, onClose }) => {
                 <label className="text-xs font-semibold text-gray-500 uppercase">Captcha Rate (BDT)</label>
                 <input type="number" step="0.01" value={captchaRate} onChange={(e) => setCaptchaRate(e.target.value)} className="w-full mt-1 p-2 border rounded-lg text-sm" />
               </div>
-              <button onClick={() => updateMutation.mutate({ endpoint: "captcha-rate", body: { value: parseFloat(captchaRate), note } })} className="bg-emerald-600 text-white px-3 py-2 rounded-lg text-xs font-bold hover:bg-emerald-700 transition">Set Rate</button>
+              <button onClick={() => {
+                if (isNaN(parseFloat(captchaRate)) || parseFloat(captchaRate) <= 0) {
+                  toast.warning("Captcha Rate must be a valid positive number.");
+                  return;
+                }
+                updateMutation.mutate({ endpoint: "captcha-rate", body: { value: parseFloat(captchaRate), note } });
+              }} className="bg-emerald-600 text-white px-3 py-2 rounded-lg text-xs font-bold hover:bg-emerald-700 transition">Set Rate</button>
             </div>
 
             {/* Balance Adjustment */}
@@ -322,7 +342,7 @@ const UserEditModal = ({ user: summaryUser, onClose }) => {
                 className="w-full mt-2 p-2 border rounded-lg text-xs bg-white" 
                 placeholder="Adjustment reason..." 
               />
-              <button 
+              <button
                 onClick={() => updateMutation.mutate({ endpoint: "balance-adjust", body: { action: adjustmentAction, amount: parseFloat(adjustmentAmount), reason: adjustmentReason } })} 
                 className="w-full mt-2 bg-amber-600 text-white py-2 rounded-lg text-xs font-bold hover:bg-amber-700 transition"
               >

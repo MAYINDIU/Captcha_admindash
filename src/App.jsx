@@ -141,6 +141,7 @@ import Alluser from './pages/UserList/Alluser';
 import WithdrawallistTrn from './pages/UserList/WithdrawallistTrn';
 import Chat from './pages/UserList/Chat';
 import Captchatask from './pages/UserList/Captchatask';
+import VerifiactionList from './pages/UserList/VerifiactionList';
 
 
 const queryClient = new QueryClient({
@@ -246,8 +247,9 @@ function App() {
 
        <Route  exact path="/all-users" element={<Alluser/>} />
        <Route  exact path="/withdrawal-list-trn-list" element={<WithdrawallistTrn/>} />
-        <Route  exact path="/chat" element={<Chat/>} />
-     <Route  exact path="/captchatask" element={<Captchatask/>} />
+       <Route  exact path="/chat" element={<Chat/>} />
+       <Route  exact path="/captchatask" element={<Captchatask/>} />
+       <Route  exact path="/verification-list" element={<VerifiactionList/>} />
         
      
 
