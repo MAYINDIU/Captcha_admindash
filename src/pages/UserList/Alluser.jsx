@@ -105,7 +105,7 @@ const UserDetailsModal = ({ user: summaryUser, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 p-4"> {/* Backdrop blur removed */}
       {/* Reduced max-w-md for a smaller modal */}
-      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full transform transition-all relative overflow-hidden">
+      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto transform transition-all relative">
         {isFetching && (
            <div className="absolute top-4 right-12">
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-600"></div>
@@ -189,6 +189,9 @@ const UserEditModal = ({ user: summaryUser, onClose }) => {
   const [captchaRate, setCaptchaRate] = useState(user.captcha_rate);
   const [captchaLimit, setCaptchaLimit] = useState(user.captcha_limit_per_day || 0);
   const [workingDays, setWorkingDays] = useState(user.working_days || 0);
+  const [newMobileNumber, setNewMobileNumber] = useState(user.mobile_number || "");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordConfirmation, setNewPasswordConfirmation] = useState("");
   const [adjustmentAmount, setAdjustmentAmount] = useState(0);
   const [adjustmentAction, setAdjustmentAction] = useState("credit");
   const [adjustmentReason, setAdjustmentReason] = useState("Admin adjustment");
@@ -201,6 +204,7 @@ const UserEditModal = ({ user: summaryUser, onClose }) => {
       setCaptchaAccess(user.captcha_access === "enabled" || user.captcha_access_enabled);
       setCaptchaRate(user.captcha_rate);
       setCaptchaLimit(user.captcha_limit_per_day || 0);
+      setNewMobileNumber(user.mobile_number || "");
       setWorkingDays(user.working_days || 0);
     }
   }, [user]);
@@ -231,98 +235,143 @@ const UserEditModal = ({ user: summaryUser, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/60 p-4">
-      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative overflow-hidden">
+      <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6 border-b pb-3">
             <h2 className="text-xl font-bold text-gray-900">Manage: {user.name}</h2>
-            <button onClick={onClose} className="text-gray-400 hover:text-red-500"><XIcon className="h-5 w-5" /></button>
+            <button onClick={onClose} className="text-gray-400 hover:text-red-500 transition-colors"><XIcon className="h-5 w-5" /></button>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-5">
             {/* Note Field */}
             <div>
               <label className="text-xs font-semibold text-gray-500 uppercase">Action Note</label>
               <input type="text" value={note} onChange={(e) => setNote(e.target.value)} className="w-full mt-1 p-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Reason for change..." />
             </div>
 
-            {/* Account & General Settings */}
-            <div className="grid grid-cols-2 gap-4">
-              {/* Status Update */}
-              <div className="flex-1">
-                <label className="text-xs font-semibold text-gray-500 uppercase flex justify-between">
-                  Status <button onClick={() => updateMutation.mutate({ endpoint: "status", body: { status } })} className="text-indigo-600 hover:underline">Update</button>
-                </label>
-                <select value={status} onChange={(e) => setStatus(e.target.value)} className="w-full mt-1 p-2 border rounded-lg text-sm bg-white">
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                  <option value="blocked">Blocked</option>
-                  <option value="pending">Pending</option>
-                </select>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+              <div className="space-y-5">
+                {/* Account & General Settings */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex-1">
+                    <label className="text-xs font-semibold text-gray-500 uppercase flex justify-between">
+                      Status <button onClick={() => updateMutation.mutate({ endpoint: "status", body: { status } })} className="text-indigo-600 hover:underline">Update</button>
+                    </label>
+                    <select value={status} onChange={(e) => setStatus(e.target.value)} className="w-full mt-1 p-2 border rounded-lg text-sm bg-white">
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                      <option value="blocked">Blocked</option>
+                      <option value="pending">Pending</option>
+                    </select>
+                  </div>
 
-              {/* Working Days */}
-              <div className="flex-1">
-                <label className="text-xs font-semibold text-gray-500 uppercase flex justify-between">
-                  Working Days <button onClick={() => updateMutation.mutate({ endpoint: "working-days", body: { action: "set", days: parseInt(workingDays), note } })} className="text-indigo-600 hover:underline">Set</button>
-                </label>
-                <input type="number" value={workingDays} onChange={(e) => setWorkingDays(e.target.value)} className="w-full mt-1 p-2 border rounded-lg text-sm" />
-              </div>
-            </div>
+                  <div className="flex-1">
+                    <label className="text-xs font-semibold text-gray-500 uppercase flex justify-between">
+                      Working Days <button onClick={() => updateMutation.mutate({ endpoint: "working-days", body: { action: "set", days: parseInt(workingDays), note } })} className="text-indigo-600 hover:underline">Set</button>
+                    </label>
+                    <input type="number" value={workingDays} onChange={(e) => setWorkingDays(e.target.value)} className="w-full mt-1 p-2 border rounded-lg text-sm" />
+                  </div>
+                </div>
 
-            {/* Bulk Captcha Settings */}
-            <div className="p-4 bg-indigo-50/50 rounded-lg border border-indigo-100">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-sm font-bold text-indigo-900">Captcha Settings</h3>
-                <button
-                  onClick={() => {
-                    if (captchaLimit === "" || captchaLimit === null) {
-                      return toast.warning("Daily Limit is required!");
+                {/* Captcha Rate */}
+                <div className="flex items-end gap-2">
+                  <div className="flex-1">
+                    <label className="text-xs font-semibold text-gray-500 uppercase">Captcha Rate (BDT)</label>
+                    <input type="number" step="0.01" value={captchaRate} onChange={(e) => setCaptchaRate(e.target.value)} className="w-full mt-1 p-2 border rounded-lg text-sm" />
+                  </div>
+                  <button onClick={() => {
+                    if (isNaN(parseFloat(captchaRate)) || parseFloat(captchaRate) <= 0) {
+                      toast.warning("Captcha Rate must be a valid positive number.");
+                      return;
                     }
-                    updateMutation.mutate({ 
-                      endpoint: "captcha-settings", 
-                      method: "PATCH",
-                      body: {
-                        captcha_access_enabled: captchaAccess,
-                        captcha_limit_per_day: parseInt(captchaLimit),
-                      },
-                    });
-                  }}
-                  className="text-xs font-bold text-white bg-indigo-600 px-3 py-1 rounded hover:bg-indigo-700"
-                >
-                  Sync Settings
-                </button>
+                    updateMutation.mutate({ endpoint: "captcha-rate", body: { value: parseFloat(captchaRate), note } });
+                  }} className="bg-emerald-600 text-white px-3 py-2 rounded-lg text-xs font-bold hover:bg-emerald-700 transition">Set Rate</button>
+                </div>
+
+                {/* Change Mobile Number */}
+                <div className="flex items-end gap-2">
+                  <div className="flex-1">
+                    <label className="text-xs font-semibold text-gray-500 uppercase">Mobile Number</label>
+                    <input type="text" value={newMobileNumber} onChange={(e) => setNewMobileNumber(e.target.value)} className="w-full mt-1 p-2 border rounded-lg text-sm" placeholder="New mobile number" />
+                  </div>
+                  <button onClick={() => {
+                    if (!newMobileNumber.trim()) {
+                      toast.warning("Mobile number cannot be empty.");
+                      return;
+                    }
+                    updateMutation.mutate({ endpoint: "credentials", method: "PATCH", body: { mobile_number: newMobileNumber, note } });
+                  }} className="bg-indigo-600 text-white px-3 py-2 rounded-lg text-xs font-bold hover:bg-indigo-700 transition">Update</button>
+                </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <label className="flex items-center space-x-2 cursor-pointer">
-                  <input type="checkbox" checked={captchaAccess} onChange={(e) => setCaptchaAccess(e.target.checked)} className="rounded text-indigo-600 focus:ring-indigo-500" />
-                  <span className="text-xs font-medium text-gray-700 uppercase">Access Enabled</span>
-                </label>
-                <div className="flex items-center space-x-2">
-                  <span className="text-[10px] font-bold text-gray-500 uppercase">Daily Limit</span>
-                  <input
-                    type="number"
-                    value={captchaLimit}
-                    onChange={(e) => setCaptchaLimit(e.target.value)}
-                    className="w-16 p-1 border rounded text-xs"
-                    required // Make the daily limit mandatory
-                  />
+
+              {/* Captcha Settings Box */}
+              <div className="p-4 bg-indigo-50/50 rounded-lg border border-indigo-100 h-full">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-sm font-bold text-indigo-900">Captcha Settings</h3>
+                  <button
+                    onClick={() => {
+                      if (captchaLimit === "" || captchaLimit === null) {
+                        return toast.warning("Daily Limit is required!");
+                      }
+                      updateMutation.mutate({ 
+                        endpoint: "captcha-settings", 
+                        method: "PATCH",
+                        body: { captcha_access_enabled: captchaAccess, captcha_limit_per_day: parseInt(captchaLimit) },
+                      });
+                    }}
+                    className="text-xs font-bold text-white bg-indigo-600 px-3 py-1 rounded hover:bg-indigo-700 transition"
+                  >
+                    Sync Settings
+                  </button>
+                </div>
+                <div className="space-y-4">
+                  <label className="flex items-center space-x-2 cursor-pointer">
+                    <input type="checkbox" checked={captchaAccess} onChange={(e) => setCaptchaAccess(e.target.checked)} className="rounded text-indigo-600 focus:ring-indigo-500" />
+                    <span className="text-xs font-medium text-gray-700 uppercase">Access Enabled</span>
+                  </label>
+                  <div className="flex flex-col">
+                    <span className="text-[10px] font-bold text-gray-500 uppercase mb-1">Daily Limit</span>
+                    <input type="number" value={captchaLimit} onChange={(e) => setCaptchaLimit(e.target.value)} className="w-full p-2 border rounded text-xs bg-white" required />
+                  </div>
                 </div>
               </div>
              </div>
 
-            {/* Captcha Rate */}
-            <div className="flex items-end gap-2">
-              <div className="flex-1">
-                <label className="text-xs font-semibold text-gray-500 uppercase">Captcha Rate (BDT)</label>
-                <input type="number" step="0.01" value={captchaRate} onChange={(e) => setCaptchaRate(e.target.value)} className="w-full mt-1 p-2 border rounded-lg text-sm" />
+            {/* Change Password Section */}
+            <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 uppercase">New Password</label>
+                  <input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="w-full mt-1 p-2 border rounded-lg text-sm bg-white" placeholder="Enter new password" />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 uppercase">Confirm Password</label>
+                  <input type="password" value={newPasswordConfirmation} onChange={(e) => setNewPasswordConfirmation(e.target.value)} className="w-full mt-1 p-2 border rounded-lg text-sm bg-white" placeholder="Confirm new password" />
+                </div>
               </div>
-              <button onClick={() => {
-                if (isNaN(parseFloat(captchaRate)) || parseFloat(captchaRate) <= 0) {
-                  toast.warning("Captcha Rate must be a valid positive number.");
-                  return;
-                }
-                updateMutation.mutate({ endpoint: "captcha-rate", body: { value: parseFloat(captchaRate), note } });
-              }} className="bg-emerald-600 text-white px-3 py-2 rounded-lg text-xs font-bold hover:bg-emerald-700 transition">Set Rate</button>
+              <button
+                onClick={() => {
+                  if (!newPassword || !newPasswordConfirmation) {
+                    toast.warning("Password and confirmation cannot be empty.");
+                    return;
+                  }
+                  if (newPassword !== newPasswordConfirmation) {
+                    toast.error("Passwords do not match.");
+                    return;
+                  }
+                  if (newPassword.length < 6) { // Example: minimum password length
+                    toast.warning("Password must be at least 6 characters long.");
+                    return;
+                  }
+                  updateMutation.mutate({
+                    endpoint: "credentials",
+                    method: "PATCH",
+                    body: { password: newPassword, password_confirmation: newPasswordConfirmation, note },
+                  });
+                  setNewPassword("");
+                  setNewPasswordConfirmation("");
+                }}
+                className="mt-3 bg-indigo-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-indigo-700 transition w-full md:w-auto">Update Password</button>
             </div>
 
             {/* Balance Adjustment */}
@@ -452,7 +501,7 @@ const Alluser = () => {
         <main className="grow p-6 md:p-10">
           <ToastContainer position="top-right" autoClose={3000} theme="colored" />
 
-          <div className="max-w-7xl mx-auto">
+          <div className="max-w-full mx-auto">
             {/* Header & Add Button */}
             <div className="flex justify-between items-center mb-8">
               <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
@@ -495,6 +544,7 @@ const Alluser = () => {
                         <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">Contact</th>
                         <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">Balances</th>
                         <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">Status</th>
+                        <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">Join Date</th>
                         <th className="px-6 py-3 text-center text-xs font-bold uppercase tracking-wider text-white">Actions</th>
                       </tr>
                     </thead>
@@ -525,6 +575,7 @@ const Alluser = () => {
                                 <span className="text-xs text-gray-500">Wallet: {formatToTk(item.wallet_balance)}</span>
                             </div>
                           </td>
+                         
                           <td className="px-6 py-3 whitespace-nowrap">
                             <div className="flex flex-col space-y-1">
                                 <span className={`inline-flex px-2 py-0.5 text-[10px] font-bold uppercase rounded-full ${
@@ -540,6 +591,34 @@ const Alluser = () => {
                                     {item.verification_status}
                                 </span>
                             </div>
+                          </td>
+                           <td className="px-6 py-3 whitespace-nowrap">
+                            <div className="flex flex-col">
+                                <span className="text-xs font-medium text-gray-800">
+                                  {item.created_at
+                                    ? new Date(item.created_at)
+                                        .toLocaleDateString("en-GB", {
+                                          day: "2-digit",
+                                          month: "short",
+                                          year: "numeric",
+                                        })
+                                        .replace(/ /g, "-")
+                                    : "N/A"}
+                                </span>
+
+                                <span className="text-[11px] text-indigo-600">
+                                  {item.created_at
+                                    ? new Date(item.created_at).toLocaleTimeString("en-US", {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        second: "2-digit",
+                                        hour12: true,
+                                      })
+                                    : ""}
+                                </span>
+
+                              
+                              </div>
                           </td>
                           <td className="px-6 py-3 whitespace-nowrap text-center space-x-1">
                             <button

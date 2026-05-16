@@ -1583,41 +1583,6 @@ function Sidebar({
             </SidebarLinkGroup>
                       </ul>
 
-        <ul className="mt-0">
-            <SidebarLinkGroup activecondition={pathname.includes("/captchatask")}>
-              {(handleClick, open) => (
-                <React.Fragment>
-                  <Link
-                    to="/captchatask"
-                    className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
-                      pathname.includes("/captchatask")
-                        ? "text-violet-500"
-                        : "hover:text-gray-900 dark:hover:text-white"
-                    }`}
-                    onClick={() => {
-                      handleClick();
-                      setSidebarExpanded(true);
-                    }}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <AiFillCompass
-                          className={`shrink-0 w-5 h-5 ${
-                            pathname.includes("/captchatask")
-                              ? "text-violet-500"
-                              : "text-gray-400 dark:text-gray-500"
-                          }`}
-                        />
-                        <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                  Captcha Task
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </React.Fragment>
-              )}
-            </SidebarLinkGroup>
-                      </ul>
 
                       
 

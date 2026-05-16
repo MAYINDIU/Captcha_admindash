@@ -158,6 +158,7 @@ const VerificationList = () => {
     },
     keepPreviousData: true,
   });
+  console.log("Fetched verification requests:", requestsData);
 
   const deleteMutation = useMutation({
     mutationFn: async (id) => {
