@@ -5,10 +5,9 @@ import { AiOutlineUsergroupAdd,AiOutlineTeam,AiFillSignal, AiFillAlert, AiFillAl
 
 import { AiOutlineContainer,AiFillProduct,AiOutlineCluster ,AiOutlineUserSwitch   } from "react-icons/ai";
 import { AiOutlineAudit } from "react-icons/ai";
-import { AiTwotoneDiff,AiTwotoneProject,AiFillCompass  } from "react-icons/ai";
+import { AiTwotoneDiff,AiTwotoneProject  } from "react-icons/ai";
 import { AiFillDatabase ,AiFillGold,AiFillAppstore,AiFillIdcard ,AiOutlineUngroup   } from "react-icons/ai";
-import { FaMoneyBillWave } from "react-icons/fa";
-import { FaHistory ,FaMoneyCheckAlt } from "react-icons/fa";
+import { FaHistory, FaMoneyBillWave, FaMoneyCheckAlt, FaComments, FaLock } from "react-icons/fa";
 
 import { BiSolidPiano,BiSolidCopy ,BiSolidDice4 ,BiOutline,BiLayerPlus ,BiDoorOpen,BiDonateBlood ,BiSolidFilm ,BiWindows ,BiSolidStore ,BiSolidUserDetail,BiAddToQueue,BiDialpadAlt ,BiDialpad ,BiSortDown     } from "react-icons/bi";
 
@@ -1522,7 +1521,7 @@ function Sidebar({
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
-                        <AiFillCompass
+                        <AiOutlineUsergroupAdd
                           className={`shrink-0 w-5 h-5 ${
                             pathname.includes("/all-users")
                               ? "text-emerald-700"
@@ -1558,7 +1557,7 @@ function Sidebar({
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
-                        <AiFillCompass
+                        <FaMoneyBillWave
                           className={`shrink-0 w-5 h-5 ${
                             pathname.includes("/withdrawal-list-trn-list")
                               ? "text-emerald-700"
@@ -1597,7 +1596,7 @@ function Sidebar({
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
-                        <AiFillCompass
+                        <AiFillIdcard
                           className={`shrink-0 w-5 h-5 ${
                             pathname.includes("/verification-list")
                               ? "text-emerald-700"
@@ -1635,7 +1634,7 @@ function Sidebar({
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         <div className="relative shrink-0">
-                          <AiFillCompass
+                          <FaComments
                             className={`shrink-0 w-5 h-5 ${
                               pathname.includes("/chat")
                                 ? "text-emerald-700"
@@ -1680,7 +1679,7 @@ function Sidebar({
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <AiFillCompass
+              <FaLock
                 className={`shrink-0 w-5 h-5 ${
                   pathname.includes("/password-change")
                     ? "text-emerald-700"

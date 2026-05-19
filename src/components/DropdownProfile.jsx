@@ -32,7 +32,7 @@ function DropdownProfile() {
       localStorage.removeItem("user");
       localStorage.removeItem("employee");
       localStorage.removeItem("customer");
-      navigate("/");
+      navigate("/admin-login");
     }
   };
 

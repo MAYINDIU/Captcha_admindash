@@ -186,6 +186,27 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
+    document.title = 'FastWork24';
+
+    const faviconHref = '/favicon.svg?v=fastwork24-3';
+    let favicon = document.querySelector("link[rel='icon']");
+    if (!favicon) {
+      favicon = document.createElement('link');
+      favicon.rel = 'icon';
+      document.head.appendChild(favicon);
+    }
+    favicon.type = 'image/svg+xml';
+    favicon.href = faviconHref;
+
+    let shortcutIcon = document.querySelector("link[rel='shortcut icon']");
+    if (!shortcutIcon) {
+      shortcutIcon = document.createElement('link');
+      shortcutIcon.rel = 'shortcut icon';
+      document.head.appendChild(shortcutIcon);
+    }
+    shortcutIcon.type = 'image/svg+xml';
+    shortcutIcon.href = faviconHref;
+
     document.querySelector('html').style.scrollBehavior = 'auto'
     window.scroll({ top: 0 })
     document.querySelector('html').style.scrollBehavior = ''

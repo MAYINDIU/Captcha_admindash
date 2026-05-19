@@ -62,18 +62,24 @@ const FastWorkHome = () => {
                 কাজ, ব্যালেন্স ও সাপোর্ট এখন এক অ্যাপে
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-8 text-emerald-50">
-                FastWork24 ব্যবহারকারীরা মোবাইল অ্যাপ থেকে কাজের টাস্ক, আয়, ওয়ালেট, ভেরিফিকেশন এবং সাপোর্ট মেসেজ সহজে পরিচালনা করতে পারবেন।
+                প্রিয় গ্রাহক,
+                আপনি কি অনলাইনে পার্ট-টাইম কাজ করে আয় করতে আগ্রহী?
+
+                তাহলে এখনই আমাদের অ্যাপটি ডাউনলোড করে একটি একাউন্ট তৈরি করুন। 
+                এরপর আপনার ইউজারনেম ও পাসওয়ার্ড দিয়ে লগইন করে সাপোর্ট টিমে মেসেজ দিন।
+                আমাদের সাপোর্ট টিম আপনাকে কাজের সম্পূর্ণ নির্দেশনা বুঝিয়ে দেবে।
+                ধন্যবাদ।
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <a
+                {/* <a
                   href={appDownloadUrl}
                   download
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-amber-300 px-6 text-sm font-black uppercase tracking-[0.12em] text-emerald-950 transition hover:bg-amber-200"
                 >
                   <FiDownload className="h-5 w-5" />
                   Android App
-                </a>
+                </a> */}
                 <a
                   href="#how-it-works"
                   className="inline-flex h-12 items-center justify-center rounded-lg border border-white/35 px-6 text-sm font-black text-white transition hover:border-amber-200 hover:bg-white/10"
@@ -119,7 +125,7 @@ const FastWorkHome = () => {
           </div>
         </section>
 
-        <section id="download" className="border-y border-amber-400 bg-amber-300 text-emerald-950">
+        {/* <section id="download" className="border-y border-amber-400 bg-amber-300 text-emerald-950">
           <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-5 px-5 py-8 md:flex-row md:items-center">
             <div>
               <h2 className="text-2xl font-black tracking-normal">FastWork24 অ্যাপ ডাউনলোড করুন</h2>
@@ -134,7 +140,7 @@ const FastWorkHome = () => {
               Download APK
             </a>
           </div>
-        </section>
+        </section> */}
 
         <section className="mx-auto max-w-6xl px-5 py-14">
           <div className="mb-8 max-w-2xl">
