@@ -159,7 +159,7 @@ const queryClient = new QueryClient({
 // ==========================================
 const WebsiteLayout = () => {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-emerald-50 text-emerald-950">
       <Navbar/>
       <main className="flex-grow">
         <Outlet />
@@ -171,7 +171,7 @@ const WebsiteLayout = () => {
 
 const DashboardLayout = () => {
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden">
+    <div className="flex h-screen bg-emerald-50 overflow-hidden">
       <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
         <Outlet />
       </div>

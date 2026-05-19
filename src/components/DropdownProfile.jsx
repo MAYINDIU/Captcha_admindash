@@ -1,137 +1,52 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import Transition from '../utils/Transition';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FiLogOut } from 'react-icons/fi';
 
-import UserAvatar from '../images/user-avatar-32.png';
-import profile from '../images/profile.png';
-
-function DropdownProfile({
-  align
-}) {
-
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  const trigger = useRef(null);
-  const dropdown = useRef(null);
-
+function DropdownProfile() {
   const navigate = useNavigate();
 
+  const handleLogout = async () => {
+    const token = localStorage.getItem("authToken");
+    const logoutUrl = "https://fastwork24.com/captcha_backend/public/api/admin/logout";
 
-const handleLogout = async () => {
-  const token = localStorage.getItem("authToken");
+    try {
+      if (token) {
+        const response = await fetch(logoutUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-  // API endpoint for logout
-  const logoutUrl = "https://fastwork24.com/captcha_backend/public/api/admin/logout";
-
-  try {
-    if (token) {
-      const response = await fetch(logoutUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        // Log the error if the API call fails
-        console.error("Logout failed on the server side.");
+        if (!response.ok) {
+          console.error("Logout failed on the server side.");
+        }
       }
+    } catch (error) {
+      console.error("An error occurred during the logout request:", error);
+    } finally {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("token");
+      localStorage.removeItem("roles");
+      localStorage.removeItem("user");
+      localStorage.removeItem("employee");
+      localStorage.removeItem("customer");
+      navigate("/");
     }
-  } catch (error) {
-    // Catch network errors
-    console.error("An error occurred during the logout request:", error);
-  } finally {
-    // Regardless of API success or failure, clear local storage and redirect
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("user");
-    localStorage.removeItem("employee");
-    localStorage.removeItem("customer");
-    navigate("/");
-  }
-};
-
-
-// Get token
-const token = localStorage.getItem("token");
-// Get user (parse because we stored JSON string)
-const user = JSON.parse(localStorage.getItem("user"));
-
-// console.log("Token:", token);
-// console.log("User:", user);
-
-  // close on click outside
-  useEffect(() => {
-    const clickHandler = ({ target }) => {
-      if (!dropdown.current) return;
-      if (!dropdownOpen || dropdown.current.contains(target) || trigger.current.contains(target)) return;
-      setDropdownOpen(false);
-    };
-    document.addEventListener('click', clickHandler);
-    return () => document.removeEventListener('click', clickHandler);
-  });
-
-  // close if the esc key is pressed
-  useEffect(() => {
-    const keyHandler = ({ keyCode }) => {
-      if (!dropdownOpen || keyCode !== 27) return;
-      setDropdownOpen(false);
-    };
-    document.addEventListener('keydown', keyHandler);
-    return () => document.removeEventListener('keydown', keyHandler);
-  });
+  };
 
   return (
-    <div className="relative inline-flex">
-     
-      <button
-        ref={trigger}
-        className="inline-flex justify-center items-center group"
-        aria-haspopup="true"
-        onClick={() => setDropdownOpen(!dropdownOpen)}
-        aria-expanded={dropdownOpen}
-      >
-        <img className="w-8 h-8 rounded-full" src={profile} width="32" height="32" alt="User" />
-        <div className="flex items-center truncate">
-          {/* <span className="truncate ml-2 text-sm font-medium text-gray-600 dark:text-gray-100 group-hover:text-gray-800 dark:group-hover:text-white">{user}</span> */}
-          <svg className="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500" viewBox="0 0 12 12">
-            <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-          </svg>
-        </div>
-      </button>
-     
-
-      <Transition
-        className={`origin-top-right z-10 absolute top-full min-w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 py-1.5 rounded-lg shadow-lg overflow-hidden mt-1 ${align === 'right' ? 'right-0' : 'left-0'}`}
-        show={dropdownOpen}
-        enter="transition ease-out duration-200 transform"
-        enterStart="opacity-0 -translate-y-2"
-        enterEnd="opacity-100 translate-y-0"
-        leave="transition ease-out duration-200"
-        leaveStart="opacity-100"
-        leaveEnd="opacity-0"
-      >
-        <div
-          ref={dropdown}
-          onFocus={() => setDropdownOpen(true)}
-          onBlur={() => setDropdownOpen(false)}
-        >
-          <div className="pt-0.5 pb-2 px-3 mb-1 border-b border-gray-200 dark:border-gray-700/60">
-            {/* <div className="font-medium text-xs text-gray-800 dark:text-gray-100">{user}</div> */}
-            {/* <div className="text-xs text-gray-500 dark:text-gray-400 italic">Administrator</div> */}
-          </div>
-          <ul>
-       
-            <li className='text-center' onClick={handleLogout}>
-             <button className='px-3 py-1 rounded-lg bg-emerald-100 text-emerald-800 font-semibold hover:bg-emerald-200'>Logout</button>
-               
-             
-            </li>
-          </ul>
-        </div>
-      </Transition>
-    </div>
-  )
+    <button
+      type="button"
+      onClick={handleLogout}
+      title="Logout"
+      aria-label="Logout"
+      className="flex h-9 w-9 items-center justify-center rounded-lg border border-emerald-100 bg-white text-emerald-700 shadow-sm transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-900 active:scale-95 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-100 dark:hover:bg-emerald-900"
+    >
+      <FiLogOut className="h-5 w-5" />
+    </button>
+  );
 }
 
 export default DropdownProfile;

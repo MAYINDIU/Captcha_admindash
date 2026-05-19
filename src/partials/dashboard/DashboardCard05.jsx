@@ -75,16 +75,16 @@ function DashboardCard05() {
           const chart = context.chart;
           const {ctx, chartArea} = chart;
           return chartAreaGradient(ctx, chartArea, [
-            { stop: 0, color: `rgba(${hexToRGB(tailwindConfig().theme.colors.violet[500])}, 0)` },
-            { stop: 1, color: `rgba(${hexToRGB(tailwindConfig().theme.colors.violet[500])}, 0.2)` }
+            { stop: 0, color: `rgba(${hexToRGB(tailwindConfig().theme.colors.emerald[500])}, 0)` },
+            { stop: 1, color: `rgba(${hexToRGB(tailwindConfig().theme.colors.emerald[500])}, 0.2)` }
           ]);
         },       
-        borderColor: tailwindConfig().theme.colors.violet[500],
+        borderColor: tailwindConfig().theme.colors.emerald[500],
         borderWidth: 2,
         pointRadius: 0,
         pointHoverRadius: 3,
-        pointBackgroundColor: tailwindConfig().theme.colors.violet[500],
-        pointHoverBackgroundColor: tailwindConfig().theme.colors.violet[500],
+        pointBackgroundColor: tailwindConfig().theme.colors.emerald[500],
+        pointHoverBackgroundColor: tailwindConfig().theme.colors.emerald[500],
         pointBorderWidth: 0,
         pointHoverBorderWidth: 0,          
         clip: 20,
@@ -109,4 +109,5 @@ function DashboardCard05() {
 }
 
 export default DashboardCard05;
+
 
