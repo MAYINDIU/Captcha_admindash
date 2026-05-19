@@ -11,7 +11,7 @@ const BellIcon = () => (
 
 const NotificationDropdown = () => {
   const token = localStorage.getItem("authToken");
-  const API_BASE = "https://alhamarahomesbd.com/captcha_backend/public/api";
+  const API_BASE = "https://fastwork24.com/captcha_backend/public/api";
   const prevUnreadCount = useRef(null);
 
   // Shared query key ["chatInbox"] ensures data is synced across the whole app

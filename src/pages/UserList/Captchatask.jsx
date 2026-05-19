@@ -83,7 +83,7 @@ const CaptchaDetailsModal = ({ item, onClose }) => (
 const CreateCaptchaModal = ({ onClose }) => {
   const queryClient = useQueryClient();
   const token = localStorage.getItem("authToken");
-  const API_BASE = "https://alhamarahomesbd.com/captcha_backend/public/api";
+  const API_BASE = "https://fastwork24.com/captcha_backend/public/api";
   const [formData, setFormData] = useState({
     title: "", description: "", reward: 5, status: "active", instructions: "", expected_answer: ""
   });
@@ -172,7 +172,7 @@ const CreateCaptchaModal = ({ onClose }) => {
 const EditCaptchaModal = ({ item, onClose }) => {
   const queryClient = useQueryClient();
   const token = localStorage.getItem("authToken");
-  const API_BASE = "https://alhamarahomesbd.com/captcha_backend/public/api";
+  const API_BASE = "https://fastwork24.com/captcha_backend/public/api";
   const [formData, setFormData] = useState({
     title: item.title || "",
     description: item.description || "",
@@ -276,7 +276,7 @@ const Captchatask = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
-  const API_BASE = "https://alhamarahomesbd.com/captcha_backend/public/api";
+  const API_BASE = "https://fastwork24.com/captcha_backend/public/api";
   const token = localStorage.getItem("authToken");
 
   const { data: taskData, isLoading } = useQuery({

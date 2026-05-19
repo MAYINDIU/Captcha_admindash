@@ -8,7 +8,7 @@ import {
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const BASE_URL = "https://alhamarahomesbd.com/captcha_backend/public/api";
+const BASE_URL = "https://fastwork24.com/captcha_backend/public/api";
 
 // --- Role-Specific Color Mapping for Header and Highlights ---
 const roleColors = {

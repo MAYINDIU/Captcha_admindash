@@ -44,7 +44,7 @@ const Login = () => {
         }
 
         try {
-            const response = await fetch('https://alhamarahomesbd.com/captcha_backend/public/api/admin/login', {
+            const response = await fetch('https://fastwork24.com/captcha_backend/public/api/admin/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -21,7 +21,7 @@ const handleLogout = async () => {
   const token = localStorage.getItem("authToken");
 
   // API endpoint for logout
-  const logoutUrl = "https://alhamarahomesbd.com/captcha_backend/public/api/admin/logout";
+  const logoutUrl = "https://fastwork24.com/captcha_backend/public/api/admin/logout";
 
   try {
     if (token) {

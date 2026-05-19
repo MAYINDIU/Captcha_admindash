@@ -76,7 +76,7 @@ const TableSkeleton = () => (
 
 const UserDetailsModal = ({ user: summaryUser, onClose }) => {
   const token = localStorage.getItem("authToken");
-  const API_BASE = "https://alhamarahomesbd.com/captcha_backend/public/api";
+  const API_BASE = "https://fastwork24.com/captcha_backend/public/api";
 
   const { data: user, isFetching } = useQuery({
     queryKey: ["userDetails", summaryUser.id],
@@ -170,7 +170,7 @@ const UserDetailsModal = ({ user: summaryUser, onClose }) => {
 const UserEditModal = ({ user: summaryUser, onClose }) => {
   const queryClient = useQueryClient();
   const token = localStorage.getItem("authToken");
-  const API_BASE = "https://alhamarahomesbd.com/captcha_backend/public/api";
+  const API_BASE = "https://fastwork24.com/captcha_backend/public/api";
 
   const { data: user } = useQuery({
     queryKey: ["userDetails", summaryUser.id],
@@ -418,7 +418,7 @@ const Alluser = () => {
   const [showFormModal, setShowFormModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
-  const API_BASE = "https://alhamarahomesbd.com/captcha_backend/public/api";
+  const API_BASE = "https://fastwork24.com/captcha_backend/public/api";
   const token = localStorage.getItem("authToken");
 
   // --- React Query: Fetch Users ---

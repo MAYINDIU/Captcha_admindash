@@ -60,7 +60,7 @@ const Chat = () => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [replyMessage, setReplyMessage] = useState("");
   
-  const API_BASE = "https://alhamarahomesbd.com/captcha_backend/public/api";
+  const API_BASE = "https://fastwork24.com/captcha_backend/public/api";
   const token = localStorage.getItem("authToken");
 
   // ---------------- Queries ----------------

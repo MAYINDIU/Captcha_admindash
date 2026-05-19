@@ -54,7 +54,7 @@ const TableSkeleton = () => (
 const WithdrawalReviewModal = ({ withdrawal, onClose }) => {
   const queryClient = useQueryClient();
   const token = localStorage.getItem("authToken");
-  const API_BASE = "https://alhamarahomesbd.com/captcha_backend/public/api";
+  const API_BASE = "https://fastwork24.com/captcha_backend/public/api";
   const [notes, setNotes] = useState("");
   const [confirmNumber, setConfirmNumber] = useState("");
 
@@ -131,7 +131,7 @@ const WithdrawalReviewModal = ({ withdrawal, onClose }) => {
 
 const UserDetailsModal = ({ user: summaryUser, onClose }) => {
   const token = localStorage.getItem("authToken");
-  const API_BASE = "https://alhamarahomesbd.com/captcha_backend/public/api";
+  const API_BASE = "https://fastwork24.com/captcha_backend/public/api";
   const { data: user } = useQuery({
     queryKey: ["userDetails", summaryUser.id],
     queryFn: async () => {
@@ -251,7 +251,7 @@ const WithdrawallistTrn = () => {
 
   const itemsPerPage = 15;
 
-  const API_BASE = "https://alhamarahomesbd.com/captcha_backend/public/api";
+  const API_BASE = "https://fastwork24.com/captcha_backend/public/api";
   const token = localStorage.getItem("authToken");
 
   // --- 1. Fetch System Status (Withdraw On/Off) ---

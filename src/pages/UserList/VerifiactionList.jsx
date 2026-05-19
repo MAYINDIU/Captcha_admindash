@@ -8,8 +8,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "../../partials/Sidebar";
 import Header from "../../partials/Header";
 
-const ASSET_BASE = "https://alhamarahomesbd.com/captcha_backend/public/storage/";
-const API_BASE = "https://alhamarahomesbd.com/captcha_backend/public/api";
+const ASSET_BASE = "https://fastwork24.com/captcha_backend/public/storage/";
+const API_BASE = "https://fastwork24.com/captcha_backend/public/api";
 
 // ================= ICONS =================
 const Icon = ({ children, className = "h-5 w-5" }) => (
