@@ -102,7 +102,7 @@ import EmployeeMonthIncentivelist from './pages/MonthlyIncentive/EmployeeMonthIn
 
 
 
-import Home from './pages/Website/Home';
+import FastWorkHome from './pages/FastWorkHome';
 import P_details from './pages/Website/Products/P_details';
 import ContactUsPage from './pages/Website/ContactUsPage';
 import AboutUsPage from './pages/Website/AboutUsPage';
@@ -196,10 +196,12 @@ function App() {
     <QueryClientProvider client={queryClient}>
     <Routes >
 
+     <Route exact path="/" element={<FastWorkHome />} />
+     <Route exact path="/web" element={<FastWorkHome />} />
+     <Route exact path="/admin-login" element={<Login />} />
+
           {/* PUBLIC WEBSITE ROUTES */}
         <Route element={<WebsiteLayout />}>
-         <Route path='/web' element={<Home></Home>}>Home</Route>
-
         <Route path='/Product_details' element={<P_details />}>P_details</Route>
         <Route path='/contact-us' element={<ContactUsPage />}>ContactUsPage</Route>
         <Route path='/about-us' element={<AboutUsPage />}>AboutUsPage</Route>
@@ -220,7 +222,6 @@ function App() {
 
      <Route element={<DashboardLayout />}>
 
-     <Route exact path="/" element={<Login />} />
      <Route exact path="/dashboard" element={<Dashboard />} />
      <Route  exact path="/all-products" element={<AllProduct />} />
      <Route  exact path="/all-services" element={<Services />} />

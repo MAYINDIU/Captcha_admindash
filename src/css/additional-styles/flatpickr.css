@@ -148,7 +148,7 @@
 .flatpickr-day.nextMonthDay:focus,
 .flatpickr-day.today:hover,
 .flatpickr-day.today:focus {
-    @apply bg-violet-500 text-violet-50;
+    @apply bg-emerald-500 text-violet-50;
 }
 
 .flatpickr-day.inRange,

@@ -40,7 +40,7 @@ export default function ThemeToggle() {
         {role === "employee" && (
         <Link
           to="/transaction-history"
-          className="bg-[#0097A7] text-white px-4 py-2 rounded-md shadow block"
+          className="bg-emerald-700 text-white px-4 py-2 rounded-md shadow block"
         >
           Balance: {balance} ৳
         </Link>
@@ -59,12 +59,12 @@ export default function ThemeToggle() {
           }
         />
         <label
-          className="flex items-center justify-center cursor-pointer w-8 h-8 hover:bg-gray-100 lg:hover:bg-gray-200 dark:hover:bg-gray-700/50 dark:lg:hover:bg-gray-800 rounded-full"
+          className="flex items-center justify-center cursor-pointer w-8 h-8 hover:bg-emerald-100 lg:hover:bg-emerald-100 dark:hover:bg-emerald-800/50 dark:lg:hover:bg-emerald-800 rounded-full"
           htmlFor="light-switch"
         >
           {/* Light Icon */}
           <svg
-            className="dark:hidden fill-current text-gray-500/80 dark:text-gray-400/80"
+            className="dark:hidden fill-current text-emerald-700/80 dark:text-emerald-200/80"
             width={16}
             height={16}
             viewBox="0 0 16 16"
@@ -82,7 +82,7 @@ export default function ThemeToggle() {
 
           {/* Dark Icon */}
           <svg
-            className="hidden dark:block fill-current text-gray-500/80 dark:text-gray-400/80"
+            className="hidden dark:block fill-current text-emerald-700/80 dark:text-emerald-200/80"
             width={16}
             height={16}
             viewBox="0 0 16 16"

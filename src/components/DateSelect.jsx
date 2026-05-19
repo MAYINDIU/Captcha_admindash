@@ -97,10 +97,10 @@ function DateSelect() {
                 <button
                   key={option.id}
                   tabIndex="0"
-                  className={`flex items-center w-full hover:bg-gray-50 hover:dark:bg-gray-700/20 py-1 px-3 cursor-pointer ${option.id === selected && 'text-violet-500'}`}
+                  className={`flex items-center w-full hover:bg-gray-50 hover:dark:bg-gray-700/20 py-1 px-3 cursor-pointer ${option.id === selected && 'text-emerald-700'}`}
                   onClick={() => { setSelected(option.id); setDropdownOpen(false); }}
                 >
-                  <svg className={`shrink-0 mr-2 fill-current text-violet-500 ${option.id !== selected && 'invisible'}`} width="12" height="9" viewBox="0 0 12 9">
+                  <svg className={`shrink-0 mr-2 fill-current text-emerald-700 ${option.id !== selected && 'invisible'}`} width="12" height="9" viewBox="0 0 12 9">
                     <path d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                   </svg>
                   <span>{option.period}</span>
@@ -115,3 +115,4 @@ function DateSelect() {
 }
 
 export default DateSelect;
+

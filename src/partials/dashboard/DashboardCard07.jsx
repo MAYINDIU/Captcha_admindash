@@ -50,7 +50,7 @@ function DashboardCard07() {
                   <div className="text-center">2.4K</div>
                 </td>
                 <td className="p-2">
-                  <div className="text-center text-green-500">$3,877</div>
+                  <div className="text-center text-green-500">৳3,877</div>
                 </td>
                 <td className="p-2">
                   <div className="text-center">267</div>
@@ -78,7 +78,7 @@ function DashboardCard07() {
                   <div className="text-center">2.2K</div>
                 </td>
                 <td className="p-2">
-                  <div className="text-center text-green-500">$3,426</div>
+                  <div className="text-center text-green-500">৳3,426</div>
                 </td>
                 <td className="p-2">
                   <div className="text-center">249</div>
@@ -106,7 +106,7 @@ function DashboardCard07() {
                   <div className="text-center">2.0K</div>
                 </td>
                 <td className="p-2">
-                  <div className="text-center text-green-500">$2,444</div>
+                  <div className="text-center text-green-500">৳2,444</div>
                 </td>
                 <td className="p-2">
                   <div className="text-center">224</div>
@@ -134,7 +134,7 @@ function DashboardCard07() {
                   <div className="text-center">1.9K</div>
                 </td>
                 <td className="p-2">
-                  <div className="text-center text-green-500">$2,236</div>
+                  <div className="text-center text-green-500">৳2,236</div>
                 </td>
                 <td className="p-2">
                   <div className="text-center">220</div>
@@ -161,7 +161,7 @@ function DashboardCard07() {
                   <div className="text-center">1.7K</div>
                 </td>
                 <td className="p-2">
-                  <div className="text-center text-green-500">$2,034</div>
+                  <div className="text-center text-green-500">৳2,034</div>
                 </td>
                 <td className="p-2">
                   <div className="text-center">204</div>

@@ -98,7 +98,7 @@ function DashboardCard03() {
         </header>
         <div className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase mb-1">Sales</div>
         <div className="flex items-start">
-          <div className="text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2">$9,962</div>
+          <div className="text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2">৳9,962</div>
           <div className="text-sm font-medium text-green-700 px-1.5 bg-green-500/20 rounded-full">+49%</div>
         </div>
       </div>
@@ -112,3 +112,4 @@ function DashboardCard03() {
 }
 
 export default DashboardCard03;
+

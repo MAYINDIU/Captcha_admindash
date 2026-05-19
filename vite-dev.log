@@ -1,0 +1,42 @@
+[32m✔[0m [33mConsole Ninja[0m extension is connected to [33mVite[0m, see [36mhttps://tinyurl.com/2vt8jxzw[0m
+Port 5173 is in use, trying another one...
+
+  [32m[1mVITE[22m v5.4.11[39m  [2mready in [0m[1m18414[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/[39m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
+Browserslist: browsers data (caniuse-lite) is 9 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[2m3:35:26 PM[22m [33m[1m[vite][22m[39m [33mwarning: [33mDuplicate key "nameBangla" in object literal[33m
+180|          department_id: department,
+181|          officeCode: officeCode,
+182|          nameBangla: nameBangla
+   |          ^
+183|        };
+184|  
+[39m
+  Plugin: [35mvite:esbuild[39m
+  File: [36mD:/xampp/htdocs/Captcha_admindash/src/pages/Card_Application/Cardapplication.jsx[39m
+[2m3:35:26 PM[22m [33m[1m[vite][22m[39m [33mwarning: [33mThis case clause will never be evaluated because it duplicates an earlier case clause[33m
+385|      switch (currentStep) {
+386|        case 1:
+387|        case 1:
+   |        ^
+388|          return (
+389|            (formData.applicantName?.trim() || '') !== '' &&
+[39m
+  Plugin: [35mvite:esbuild[39m
+  File: [36mD:/xampp/htdocs/Captcha_admindash/src/pages/Card_Application/Cardapplication.jsx[39m
+[2m3:37:13 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/FastWorkHome.jsx, /src/css/style.css[22m
+[2m3:37:13 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/FastWorkHome.jsx, /src/css/style.css[22m
+[2m3:37:13 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/UserList/Chat.jsx, /src/css/style.css[22m
+[2m3:37:14 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/partials/dashboard/DashboardCard07.jsx, /src/css/style.css[22m
+[2m3:37:14 PM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/partials/dashboard/DashboardCard03.jsx[22m
+[2m3:37:14 PM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/charts/LineChart02.jsx[22m
+[2m3:37:14 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/css/style.css[22m
+[2m3:39:21 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/FastWorkHome.jsx, /src/css/style.css[22m
+[2m3:39:21 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/FastWorkHome.jsx, /src/css/style.css[22m
+[2m3:40:12 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Login.jsx, /src/css/style.css[22m
+[2m3:43:20 PM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mtailwind.config.js[22m
+[2m3:43:20 PM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mtailwind.config.js[22m

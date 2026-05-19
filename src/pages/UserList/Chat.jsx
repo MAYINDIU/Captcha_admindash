@@ -43,6 +43,8 @@ const formatDateHeader = (dateStr) => {
   return date.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
 };
 
+const getAdminUnreadCount = (chat) => Number(chat?.unread_count ?? chat?.admin_unread_count ?? 0);
+
 const Icon = ({ children, className = "h-5 w-5" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>{children}</svg>
 );
@@ -54,7 +56,10 @@ const DeleteIcon = () => <Icon className="h-4 w-4"><path strokeLinecap="round" s
 const Chat = () => {
   const queryClient = useQueryClient();
   const topRef = useRef(null);
+  const messagesContainerRef = useRef(null);
   const lastInboxRef = useRef([]);
+  const seenInFlightRef = useRef(new Set());
+  const shouldStickToLatestRef = useRef(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUserId, setSelectedUserId] = useState(null);
@@ -62,6 +67,19 @@ const Chat = () => {
   
   const API_BASE = "https://fastwork24.com/captcha_backend/public/api";
   const token = localStorage.getItem("authToken");
+
+  const scrollToLatestMessage = () => {
+    requestAnimationFrame(() => {
+      if (messagesContainerRef.current) {
+        messagesContainerRef.current.scrollTop = 0;
+      }
+    });
+  };
+
+  const handleMessagesScroll = () => {
+    if (!messagesContainerRef.current) return;
+    shouldStickToLatestRef.current = Math.abs(messagesContainerRef.current.scrollTop) < 120;
+  };
 
   // ---------------- Queries ----------------
 
@@ -72,9 +90,11 @@ const Chat = () => {
       const res = await fetch(`${API_BASE}/admin/chats`, {
         headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
       });
+      if (!res.ok) return { data: [] };
       return res.json();
     },
-    refetchInterval: 4000, // ৪ সেকেন্ড পর পর রিফ্রেশ হবে
+    refetchInterval: 4000,
+    enabled: !!token,
   });
 
   // 2. Fetch Active Conversation
@@ -83,18 +103,23 @@ const Chat = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    refetch: refetchMessages
   } = useInfiniteQuery({
     queryKey: ["chatMessages", selectedUserId],
     queryFn: async ({ pageParam = 1 }) => {
       const res = await fetch(`${API_BASE}/admin/chats/${selectedUserId}?page=${pageParam}`, {
         headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
       });
+      if (!res.ok) return { data: [] };
       return res.json();
     },
-    getNextPageParam: (lastPage) => (lastPage.current_page < lastPage.last_page ? lastPage.current_page + 1 : undefined),
+    getNextPageParam: (lastPage) => (
+      lastPage.current_page && lastPage.last_page && lastPage.current_page < lastPage.last_page
+        ? lastPage.current_page + 1
+        : undefined
+    ),
     enabled: !!selectedUserId,
-    refetchInterval: 3000, // চ্যাট উইন্ডো খোলা থাকলে প্রতি ৩ সেকেন্ডে ডাটা আপডেট হবে
+    refetchInterval: 3000,
+    refetchOnMount: "always",
   });
 
   // ---------------- Notifications ----------------
@@ -105,11 +130,13 @@ const Chat = () => {
     if (lastInboxRef.current.length > 0) {
       inboxResponse.data.forEach(chat => {
         const prevChat = lastInboxRef.current.find(c => c.conversation_key === chat.conversation_key);
+        const unreadCount = getAdminUnreadCount(chat);
+        const previousUnreadCount = getAdminUnreadCount(prevChat);
         
         // Detect if unread count increased for a user that is NOT the one we are currently chatting with
-        if (chat.user_unread_count > 0 && (!prevChat || chat.user_unread_count > prevChat.user_unread_count)) {
+        if (unreadCount > 0 && (!prevChat || unreadCount > previousUnreadCount)) {
           if (chat.user_id !== selectedUserId) {
-            toast.error(`🔔 New Message from ${chat.user?.name || 'User'}`, {
+            toast.error(`New Message from ${chat.user?.name || 'User'}`, {
               theme: "colored",
               autoClose: 3500,
             });
@@ -122,6 +149,76 @@ const Chat = () => {
 
   // ---------------- Mutation ----------------
 
+  const markSeenMutation = useMutation({
+    mutationFn: async (userId) => {
+      const res = await fetch(`${API_BASE}/admin/chats/${userId}/seen`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ user_id: userId }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to mark messages as seen");
+      return data;
+    },
+    onSuccess: (_, userId) => {
+      const seenAt = new Date().toISOString();
+
+      queryClient.setQueryData(["chatMessages", userId], (old) => {
+        if (!old?.pages) return old;
+
+        return {
+          ...old,
+          pages: old.pages.map((page) => ({
+            ...page,
+            data: Array.isArray(page.data)
+              ? page.data.map((message) => (
+                  message.sender_type === "user" && message.seen_status !== "seen"
+                    ? { ...message, seen_status: "seen", seen_at: seenAt }
+                    : message
+                ))
+              : page.data,
+          })),
+        };
+      });
+
+      queryClient.setQueryData(["chatInbox"], (old) => {
+        if (!Array.isArray(old?.data)) return old;
+
+        return {
+          ...old,
+          data: old.data.map((chat) => {
+            if (chat.user_id !== userId) return chat;
+
+            return {
+              ...chat,
+              unread_count: 0,
+              admin_unread_count: 0,
+              latest_message: chat.latest_message?.sender_type === "user"
+                ? { ...chat.latest_message, seen_status: "seen", seen_at: seenAt }
+                : chat.latest_message,
+            };
+          }),
+        };
+      });
+
+      queryClient.invalidateQueries({ queryKey: ["chatInbox"] });
+    },
+    onSettled: (_, __, userId) => {
+      seenInFlightRef.current.delete(userId);
+    },
+  });
+
+  const markConversationSeen = (userId) => {
+    if (!userId || seenInFlightRef.current.has(userId)) return;
+
+    seenInFlightRef.current.add(userId);
+    markSeenMutation.mutate(userId);
+  };
+
   const replyMutation = useMutation({
     mutationFn: async (message) => {
       const res = await fetch(`${API_BASE}/admin/chats/${selectedUserId}/reply`, {
@@ -133,7 +230,8 @@ const Chat = () => {
     },
     // Optimistic Update: ব্যাকএন্ডে হিট করার সাথে সাথে ফ্রন্টএন্ড চ্যাট বক্সে মেসেজ পুশ করার লজিক
     onMutate: async (newMessage) => {
-      await queryClient.cancelQueries(["chatMessages", selectedUserId]);
+      shouldStickToLatestRef.current = true;
+      await queryClient.cancelQueries({ queryKey: ["chatMessages", selectedUserId] });
       const previousMessages = queryClient.getQueryData(["chatMessages", selectedUserId]);
 
       // লোকালভাবে নতুন মেসেজ অবজেক্ট তৈরি করা হলো
@@ -170,8 +268,8 @@ const Chat = () => {
     onSuccess: () => {
       setReplyMessage("");
       // সার্ভারের অরিজিনাল ডাটার সাথে সিঙ্ক করার জন্য জোরপূর্বক ইনভ্যালিডেশন
-      queryClient.invalidateQueries(["chatMessages", selectedUserId]);
-      queryClient.invalidateQueries(["chatInbox"]);
+      queryClient.invalidateQueries({ queryKey: ["chatMessages", selectedUserId] });
+      queryClient.invalidateQueries({ queryKey: ["chatInbox"] });
     },
   });
 
@@ -187,8 +285,8 @@ const Chat = () => {
     },
     onSuccess: (data) => {
       toast.success(data.message || "Message deleted successfully");
-      queryClient.invalidateQueries(["chatMessages", selectedUserId]);
-      queryClient.invalidateQueries(["chatInbox"]);
+      queryClient.invalidateQueries({ queryKey: ["chatMessages", selectedUserId] });
+      queryClient.invalidateQueries({ queryKey: ["chatInbox"] });
     },
     onError: (err) => toast.error(err.message),
   });
@@ -208,7 +306,7 @@ const Chat = () => {
       if (userId === selectedUserId) {
         setSelectedUserId(null); // Only clear if we deleted the active chat
       }
-      queryClient.invalidateQueries(["chatInbox"]); // Refresh the inbox list
+      queryClient.invalidateQueries({ queryKey: ["chatInbox"] }); // Refresh the inbox list
     },
     onError: (err) => toast.error(err.message),
   });
@@ -248,6 +346,18 @@ const Chat = () => {
     replyMutation.mutate(replyMessage);
   };
 
+  const handleSelectChat = (chat) => {
+    shouldStickToLatestRef.current = true;
+    setSelectedUserId(chat.user_id);
+    setReplyMessage("");
+
+    queryClient.invalidateQueries({ queryKey: ["chatMessages", chat.user_id] });
+
+    if (getAdminUnreadCount(chat) > 0) {
+      markConversationSeen(chat.user_id);
+    }
+  };
+
   // Infinite Scroll Trigger
   useEffect(() => {
     if (!topRef.current || !hasNextPage || isFetchingNextPage) return;
@@ -265,12 +375,12 @@ const Chat = () => {
     return () => observer.disconnect();
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  const chats = inboxResponse?.data || [];  
+  const chats = Array.isArray(inboxResponse?.data) ? inboxResponse.data : [];
   
   // মেসেজ প্রসেসিং এবং সর্টিং (রিভার্স স্ক্রলের জন্য সঠিক ফরম্যাট নিশ্চিতকরণ)
   const processedMessages = useMemo(() => {
     // Flatten and ensure messages are sorted NEWEST to OLDEST for flex-col-reverse logic
-    let raw = messagesResponse?.pages.flatMap((page) => page.data) || [];
+    let raw = messagesResponse?.pages.flatMap((page) => page.data || []) || [];
     raw = [...raw].sort((a, b) => new Date(b.sent_at || b.created_at) - new Date(a.sent_at || a.created_at));
 
     const result = [];
@@ -295,6 +405,22 @@ const Chat = () => {
     }
     return result;
   }, [messagesResponse]);
+
+  const latestMessageId = processedMessages.find((item) => item.type === "message")?.id;
+  const unseenUserMessageIds = processedMessages
+    .filter((item) => item.type === "message" && item.sender_type === "user" && item.seen_status !== "seen")
+    .map((item) => item.id)
+    .join(",");
+
+  useEffect(() => {
+    if (!selectedUserId || !latestMessageId) return;
+    if (shouldStickToLatestRef.current) scrollToLatestMessage();
+  }, [selectedUserId, latestMessageId]);
+
+  useEffect(() => {
+    if (!selectedUserId || !unseenUserMessageIds) return;
+    markConversationSeen(selectedUserId);
+  }, [selectedUserId, unseenUserMessageIds]);
 
   const activeChat = chats.find(c => c.user_id === selectedUserId);
 
@@ -325,13 +451,14 @@ const Chat = () => {
                 .filter(c => c.user?.name?.toLowerCase().includes(searchTerm.toLowerCase()))
                 .map((chat) => {
                   const isSelected = selectedUserId === chat.user_id;
+                  const unreadCount = getAdminUnreadCount(chat);
                   // Hide unread indicators for the chat that is currently open
-                  const hasUnread = chat.user_unread_count > 0 && !isSelected;
+                  const hasUnread = unreadCount > 0 && !isSelected;
                   
                   return (
                     <button
                       key={chat.conversation_key}
-                      onClick={() => setSelectedUserId(chat.user_id)}
+                      onClick={() => handleSelectChat(chat)}
                       className={`w-full p-4 flex items-start space-x-3 text-left transition-all relative group
                         ${isSelected ? 'bg-indigo-50/70 border-r-4 border-r-indigo-600' : ''}
                         ${!isSelected && hasUnread ? 'bg-indigo-50 hover:bg-indigo-100' : ''}
@@ -380,7 +507,7 @@ const Chat = () => {
                           <div className="flex items-center space-x-2">
                             {hasUnread && (
                               <span className="bg-red-500 text-white font-extrabold text-[10px] h-5 min-w-[20px] px-1 rounded-full flex items-center justify-center animate-pulse shadow-sm shadow-red-200">
-                                {chat.user_unread_count}
+                                {unreadCount > 99 ? "99+" : unreadCount}
                               </span>
                             )}
                             <button
@@ -418,7 +545,7 @@ const Chat = () => {
                     <div className="truncate">
                       <h3 className="font-bold text-gray-800 text-sm leading-tight truncate">{activeChat?.user?.name}</h3>
                       <p className="text-[10px] text-gray-400 font-semibold truncate">
-                        {activeChat?.user?.email} • <span className="text-emerald-600 uppercase font-bold">Balance: ${activeChat?.user?.wallet_balance}</span>
+                        {activeChat?.user?.email} • <span className="text-emerald-600 uppercase font-bold">Balance: ৳{activeChat?.user?.wallet_balance}</span>
                       </p>
                     </div>
                   </div>
@@ -437,7 +564,11 @@ const Chat = () => {
                 </div>
 
                 {/* Messages Feed (Reversed Layout) */}
-                <div className="flex-1 overflow-y-auto p-4 md:p-6 flex flex-col-reverse">
+                <div
+                  ref={messagesContainerRef}
+                  onScroll={handleMessagesScroll}
+                  className="flex-1 overflow-y-auto p-4 md:p-6 flex flex-col-reverse"
+                >
                   {processedMessages.map((item) => (
                     item.type === 'unread_divider' ? (
                       <div key={item.id} className="flex items-center my-8">

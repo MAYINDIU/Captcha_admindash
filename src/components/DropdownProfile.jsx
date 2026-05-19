@@ -123,7 +123,7 @@ const user = JSON.parse(localStorage.getItem("user"));
           <ul>
        
             <li className='text-center' onClick={handleLogout}>
-             <button className=' px-3 py-1 bg-green-600/20 rounded-lg'>Logout</button>
+             <button className='px-3 py-1 rounded-lg bg-emerald-100 text-emerald-800 font-semibold hover:bg-emerald-200'>Logout</button>
                
              
             </li>

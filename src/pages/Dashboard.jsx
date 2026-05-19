@@ -23,12 +23,12 @@ function Dashboard() {
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       {/* Content area */}
-      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden bg-emerald-50">
 
         {/*  Site header */}
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-        <main className="grow">
+        <main className="grow bg-emerald-50">
       <div className="px-4 sm:px-6 lg:px-8 round-lg py-0 w-full max-w-full mx-auto">
           {/* Cards */}
           <div className="w-full">

@@ -21,12 +21,10 @@ export const hexToRGB = (h) => {
   return `${+r},${+g},${+b}`;
 };
 
-export const formatValue = (value) => Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
+export const formatValue = (value) => `৳${Intl.NumberFormat('en-US', {
   maximumSignificantDigits: 3,
   notation: 'compact',
-}).format(value);
+}).format(value)}`;
 
 export const formatThousands = (value) => Intl.NumberFormat('en-US', {
   maximumSignificantDigits: 3,

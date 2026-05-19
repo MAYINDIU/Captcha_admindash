@@ -11,9 +11,10 @@ import { FaMoneyBillWave } from "react-icons/fa";
 import { FaHistory ,FaMoneyCheckAlt } from "react-icons/fa";
 
 import { BiSolidPiano,BiSolidCopy ,BiSolidDice4 ,BiOutline,BiLayerPlus ,BiDoorOpen,BiDonateBlood ,BiSolidFilm ,BiWindows ,BiSolidStore ,BiSolidUserDetail,BiAddToQueue,BiDialpadAlt ,BiDialpad ,BiSortDown     } from "react-icons/bi";
-import logo from '../images/logo.png';
 
 import { BiBorderAll,BiAlarmExclamation  } from "react-icons/bi";
+import FastWorkBrand from "../components/FastWorkBrand";
+import { useChatNotifications } from "../hooks/useChatNotifications";
 
 function Sidebar({
   sidebarOpen,
@@ -72,6 +73,7 @@ function Sidebar({
     const roles =  JSON.parse(localStorage.getItem("roles"));
     const role=employee?.role;
       const rank=employee?.employee?.rank;
+  const { totalUnread } = useChatNotifications({ enabled: role === 'admin' });
 // console.log(rank)
 
   return (
@@ -88,14 +90,14 @@ function Sidebar({
       <div
         id="sidebar"
         ref={sidebar}
-        className={`flex lg:!flex flex-col absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 h-[100dvh] overflow-y-scroll lg:overflow-y-auto no-scrollbar w-64 lg:w-20 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-white dark:bg-gray-800 p-4 transition-all duration-200 ease-in-out ${sidebarOpen ? "translate-x-0" : "-translate-x-64"} ${variant === 'v2' ? 'border-r border-gray-200 dark:border-gray-700/60' : 'rounded-r-2xl shadow-sm'}`}
+        className={`flex lg:!flex flex-col absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 h-[100dvh] overflow-y-scroll lg:overflow-y-auto no-scrollbar w-64 lg:w-20 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-white dark:bg-emerald-950 p-4 transition-all duration-200 ease-in-out ${sidebarOpen ? "translate-x-0" : "-translate-x-64"} ${variant === 'v2' ? 'border-r border-emerald-100 dark:border-emerald-800' : 'rounded-r-2xl shadow-sm ring-1 ring-emerald-100/80 dark:ring-emerald-800/80'}`}
       >
         {/* Sidebar header */}
         <div className="flex justify-between mb-5 pr-3 sm:px-2">
           {/* Close button */}
           <button
             ref={trigger}
-            className="lg:hidden text-gray-500 hover:text-gray-400"
+            className="lg:hidden text-emerald-700 hover:text-emerald-900"
             onClick={() => setSidebarOpen(!sidebarOpen)}
             aria-controls="sidebar"
             aria-expanded={sidebarOpen}
@@ -106,17 +108,8 @@ function Sidebar({
             </svg>
           </button>
           {/* Logo */}
-          <NavLink end to="/dashboard" className="block">
-          <div className="flex">
-         <img className="rounded h-32 w-32"
-                        src={logo}
-                        alt=""
-                        />
-                   
-            {/* <h2 className="ml-2 mt-3 text-[#333] dark:text-[#fff] font-bold">  <span className="text-sm lg:text-md  -text-[#333] dark:text-[#fff]">AL-HUMRA HOMES</span></h2>
-           */}
-          </div>
-           
+          <NavLink end to="/dashboard" className="block overflow-hidden">
+            <FastWorkBrand labelClassName="lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200" />
           </NavLink>
         </div>
 
@@ -149,7 +142,7 @@ function Sidebar({
                     <svg
                       className={`shrink-0 fill-current ${
                         pathname === "/" || pathname.includes("dashboard")
-                          ? "text-violet-500"
+                          ? "text-emerald-700"
                           : "text-gray-400 dark:text-gray-500"
                       }`}
                       xmlns="http://www.w3.org/2000/svg"
@@ -191,7 +184,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiFillSignal 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/create-sales") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -233,7 +226,7 @@ function Sidebar({
                     <svg
                       className={`shrink-0 fill-current ${
                         pathname === "/" || pathname.includes("dashboard")
-                          ? "text-violet-500"
+                          ? "text-emerald-700"
                           : "text-gray-400 dark:text-gray-500"
                       }`}
                       xmlns="http://www.w3.org/2000/svg"
@@ -275,7 +268,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <BiAlarmExclamation 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/employee-announcement-list") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -314,7 +307,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <BiAlarmExclamation 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/employee-wallet-statement") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -361,7 +354,7 @@ function Sidebar({
                 className={`shrink-0 fill-current ${
                   pathname.includes("/promotion-list-employee") ||
                   pathname.includes("/promotion-acheivement")
-                    ? "text-violet-500"
+                    ? "text-emerald-700"
                     : "text-dark dark:text-dark"
                 }`}
               />
@@ -394,7 +387,7 @@ function Sidebar({
                 to="/promotion-list-employee"
                 className={`block transition duration-150 truncate ${
                   pathname.includes("/promotion-list-employee")
-                    ? "text-violet-500 font-semibold"
+                    ? "text-emerald-700 font-semibold"
                     : "text-gray-800 dark:text-gray-100 hover:text-gray-900 dark:hover:text-white"
                 }`}
               >
@@ -410,7 +403,7 @@ function Sidebar({
                 to="/promotion-acheivement"
                 className={`block transition duration-150 truncate ${
                   pathname.includes("/promotion-acheivement")
-                    ? "text-violet-500 font-semibold"
+                    ? "text-emerald-700 font-semibold"
                     : "text-gray-800 dark:text-gray-100 hover:text-gray-900 dark:hover:text-white"
                 }`}
               >
@@ -425,7 +418,7 @@ function Sidebar({
                 to="/promotion-reward-transaction"
                 className={`block transition duration-150 truncate ${
                   pathname.includes("/promotion-reward-transaction")
-                    ? "text-violet-500 font-semibold"
+                    ? "text-emerald-700 font-semibold"
                     : "text-gray-800 dark:text-gray-100 hover:text-gray-900 dark:hover:text-white"
                 }`}
               >
@@ -470,7 +463,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiOutlineTeam 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/customer-list-emp") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -508,7 +501,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiOutlineTeam 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/add-work-summary") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -545,7 +538,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiOutlineTeam 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/my-team-list") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -585,7 +578,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiFillSignal 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/withdrawal-req-employee") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -624,7 +617,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiOutlineAudit 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/commission-list-employyee") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -661,7 +654,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiOutlineAudit 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/employee-month-incentive-list") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -698,7 +691,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiFillAlert 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/my-sales-list") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -735,7 +728,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiFillAlert 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/employee-request-list") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -765,7 +758,7 @@ function Sidebar({
               to="/employee-add-request"
               className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
                 pathname === "/employee-add-request" 
-                  ? "bg-violet-50 dark:bg-violet-500/10" // Optional: highlight background if active
+                  ? "bg-emerald-50 dark:bg-emerald-500/10" // Optional: highlight background if active
                   : "hover:text-gray-900 dark:hover:text-white"
               }`}
               onClick={() => {
@@ -778,7 +771,7 @@ function Sidebar({
                   <AiFillAlert 
                     className={`shrink-0 fill-current ${
                       pathname.includes("/employee-add-request") 
-                        ? 'text-violet-500' 
+                        ? 'text-emerald-700' 
                         : 'text-slate-400 dark:text-slate-500'
                     }`}
                     size={16}
@@ -822,7 +815,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiTwotoneProject 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/password-change") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -865,7 +858,7 @@ function Sidebar({
                     <svg
                       className={`shrink-0 fill-current ${
                         pathname === "/" || pathname.includes("dashboard")
-                          ? "text-violet-500"
+                          ? "text-emerald-700"
                           : "text-gray-400 dark:text-gray-500"
                       }`}
                       xmlns="http://www.w3.org/2000/svg"
@@ -909,7 +902,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiFillSignal 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/agent-sales-summary") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -945,7 +938,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiFillSignal 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/agent-wallet-statement") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -983,7 +976,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiFillSignal 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/agent-payment-settlement") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -1022,7 +1015,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiFillSignal 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/agent-create-sales") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -1058,7 +1051,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiFillSignal 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/agent-sale-list") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -1097,7 +1090,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiFillSignal 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/agent-commission-list") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -1135,7 +1128,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiFillSignal 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/withdrawal-req-agent") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -1177,7 +1170,7 @@ function Sidebar({
                 <AiFillGold 
                   className={`shrink-0 fill-current ${
                     (pathname.includes("/create-customer-agent") || pathname.includes("/create-customer-agent"))
-                      ? 'text-violet-500' 
+                      ? 'text-emerald-700' 
                       : 'text-dark dark:text-dark'}`}
                 />
                 <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -1201,7 +1194,7 @@ function Sidebar({
                   to="/create-customer-agent"
                   className={`block text-gray-800 dark:text-gray-100 transition duration-150 truncate ${
                     pathname.includes("/create-customer-agent") 
-                      ? 'text-violet-500 font-semibold' 
+                      ? 'text-emerald-700 font-semibold' 
                       : 'hover:text-gray-900 dark:hover:text-white'
                   }`}
                 >
@@ -1243,7 +1236,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiFillSignal 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/agent-customer-payment") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -1287,7 +1280,7 @@ function Sidebar({
                     <svg
                       className={`shrink-0 fill-current ${
                         pathname === "/" || pathname.includes("dashboard")
-                          ? "text-violet-500"
+                          ? "text-emerald-700"
                           : "text-gray-400 dark:text-gray-500"
                       }`}
                       xmlns="http://www.w3.org/2000/svg"
@@ -1329,7 +1322,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <BiDialpad  
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/installment-list") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -1366,7 +1359,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <BiSortDown  
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/customer-order-list") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -1405,7 +1398,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiFillSignal 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/customer-payment-history") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -1442,7 +1435,7 @@ function Sidebar({
                             <div className="flex items-center">
                               <AiFillSignal 
                                 className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") || pathname.includes("/change-password") 
-                                  ? 'text-violet-500' 
+                                  ? 'text-emerald-700' 
                                   : 'text-dark dark:dark'}`}
                               />
                               <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -1489,7 +1482,7 @@ function Sidebar({
                               <div className="flex items-center justify-between">
                                 <div className="flex items-center">
                                 <svg 
-                                className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") ? 'text-violet-500' : 'text-gray-400 dark:text-gray-500'}`} 
+                                className={`shrink-0 fill-current ${pathname === "/" || pathname.includes("dashboard") ? 'text-emerald-700' : 'text-gray-400 dark:text-gray-500'}`} 
                                 xmlns="http://www.w3.org/2000/svg" 
                                 width="24" 
                                 height="24" 
@@ -1519,7 +1512,7 @@ function Sidebar({
                     to="/all-users"
                     className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
                       pathname.includes("/all-users")
-                        ? "text-violet-500"
+                        ? "text-emerald-700"
                         : "hover:text-gray-900 dark:hover:text-white"
                     }`}
                     onClick={() => {
@@ -1532,7 +1525,7 @@ function Sidebar({
                         <AiFillCompass
                           className={`shrink-0 w-5 h-5 ${
                             pathname.includes("/all-users")
-                              ? "text-violet-500"
+                              ? "text-emerald-700"
                               : "text-gray-400 dark:text-gray-500"
                           }`}
                         />
@@ -1555,7 +1548,7 @@ function Sidebar({
                     to="/withdrawal-list-trn-list"
                     className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
                       pathname.includes("/withdrawal-list-trn-list")
-                        ? "text-violet-500"
+                        ? "text-emerald-700"
                         : "hover:text-gray-900 dark:hover:text-white"
                     }`}
                     onClick={() => {
@@ -1568,7 +1561,7 @@ function Sidebar({
                         <AiFillCompass
                           className={`shrink-0 w-5 h-5 ${
                             pathname.includes("/withdrawal-list-trn-list")
-                              ? "text-violet-500"
+                              ? "text-emerald-700"
                               : "text-gray-400 dark:text-gray-500"
                           }`}
                         />
@@ -1594,7 +1587,7 @@ function Sidebar({
                     to="/verification-list"
                     className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
                       pathname.includes("/verification-list")
-                        ? "text-violet-500"
+                        ? "text-emerald-700"
                         : "hover:text-gray-900 dark:hover:text-white"
                     }`}
                     onClick={() => {
@@ -1607,7 +1600,7 @@ function Sidebar({
                         <AiFillCompass
                           className={`shrink-0 w-5 h-5 ${
                             pathname.includes("/verification-list")
-                              ? "text-violet-500"
+                              ? "text-emerald-700"
                               : "text-gray-400 dark:text-gray-500"
                           }`}
                         />
@@ -1631,7 +1624,7 @@ function Sidebar({
                     to="/chat"
                     className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
                       pathname.includes("/chat")
-                        ? "text-violet-500"
+                        ? "text-emerald-700"
                         : "hover:text-gray-900 dark:hover:text-white"
                     }`}
                     onClick={() => {
@@ -1641,17 +1634,27 @@ function Sidebar({
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
-                        <AiFillCompass
-                          className={`shrink-0 w-5 h-5 ${
-                            pathname.includes("/chat")
-                              ? "text-violet-500"
-                              : "text-gray-400 dark:text-gray-500"
-                          }`}
-                        />
+                        <div className="relative shrink-0">
+                          <AiFillCompass
+                            className={`shrink-0 w-5 h-5 ${
+                              pathname.includes("/chat")
+                                ? "text-emerald-700"
+                                : "text-gray-400 dark:text-gray-500"
+                            }`}
+                          />
+                          {totalUnread > 0 && (
+                            <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white dark:ring-gray-800 animate-pulse" />
+                          )}
+                        </div>
                         <span className="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                   Chat
                         </span>
                       </div>
+                      {totalUnread > 0 && (
+                        <span className="ml-2 hidden min-w-[20px] h-5 px-1 rounded-full bg-red-500 text-[10px] font-black text-white lg:sidebar-expanded:flex 2xl:flex items-center justify-center shadow-sm shadow-red-200">
+                          {totalUnread > 99 ? "99+" : totalUnread}
+                        </span>
+                      )}
                     </div>
                   </Link>
                 </React.Fragment>
@@ -1667,7 +1670,7 @@ function Sidebar({
           to="/password-change"
           className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
             pathname.includes("/password-change")
-              ? "text-violet-500"
+              ? "text-emerald-700"
               : "hover:text-gray-900 dark:hover:text-white"
           }`}
           onClick={() => {
@@ -1680,7 +1683,7 @@ function Sidebar({
               <AiFillCompass
                 className={`shrink-0 w-5 h-5 ${
                   pathname.includes("/password-change")
-                    ? "text-violet-500"
+                    ? "text-emerald-700"
                     : "text-gray-400 dark:text-gray-500"
                 }`}
               />
@@ -1723,9 +1726,9 @@ function Sidebar({
         {/* Expand / collapse button */}
         <div className="pt-3 hidden lg:inline-flex 2xl:hidden justify-end mt-auto">
           <div className="w-12 pl-4 pr-3 py-2">
-            <button className="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400" onClick={() => setSidebarExpanded(!sidebarExpanded)}>
+            <button className="text-emerald-500 hover:text-emerald-700 dark:text-emerald-300 dark:hover:text-emerald-100" onClick={() => setSidebarExpanded(!sidebarExpanded)}>
               <span className="sr-only">Expand / collapse sidebar</span>
-              <svg className="shrink-0 fill-current text-gray-400 dark:text-gray-500 sidebar-expanded:rotate-180" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+              <svg className="shrink-0 fill-current text-emerald-500 dark:text-emerald-300 sidebar-expanded:rotate-180" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                 <path d="M15 16a1 1 0 0 1-1-1V1a1 1 0 1 1 2 0v14a1 1 0 0 1-1 1ZM8.586 7H1a1 1 0 1 0 0 2h7.586l-2.793 2.793a1 1 0 1 0 1.414 1.414l4.5-4.5A.997.997 0 0 0 12 8.01M11.924 7.617a.997.997 0 0 0-.217-.324l-4.5-4.5a1 1 0 0 0-1.414 1.414L8.586 7M12 7.99a.996.996 0 0 0-.076-.373Z" />
               </svg>
             </button>
@@ -1737,3 +1740,4 @@ function Sidebar({
 }
 
 export default Sidebar;
+

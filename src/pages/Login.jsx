@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import logo from '../images/logo.png';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { FaEye } from 'react-icons/fa';
+import FastWorkBrand from '../components/FastWorkBrand';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -11,7 +11,6 @@ const Login = () => {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const navigate = useNavigate();
 
-    // Device ID (optional)
     const [deviceId, setDeviceId] = useState('');
 
     useEffect(() => {
@@ -60,17 +59,15 @@ const Login = () => {
                 return;
             }
 
-            // Save token & user info
             localStorage.setItem('authToken', data?.data?.token);
             localStorage.setItem('user', JSON.stringify(data?.data?.admin));
 
             Swal.fire('Success', 'Login successful!', 'success');
 
-            // Redirect admin to dashboard
             if (data?.data?.admin?.role === 'admin') {
                 navigate('/dashboard');
             } else {
-                navigate('/'); // Or another route for regular users
+                navigate('/');
             }
 
         } catch (error) {
@@ -82,86 +79,112 @@ const Login = () => {
     };
 
     const Spinner = () => (
-        <div className="border-4 border-t-4 border-white border-t-transparent rounded-full w-5 h-5 animate-spin"></div>
+        <div className="h-5 w-5 rounded-full border-2 border-white/40 border-t-white animate-spin"></div>
     );
 
     return (
-        <div className="relative min-h-screen flex items-center justify-center p-6 sm:p-12 bg-stone-900 font-inter">
-            <div className="absolute inset-0 z-0 bg-gradient-to-br from-red-950 via-stone-900 to-amber-700 opacity-80">
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-amber-500 opacity-5 blur-[100px]"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-red-800 opacity-5 blur-[100px]"></div>
-            </div>
+        <div className="min-h-screen bg-emerald-50 text-emerald-950 font-inter">
+            <div className="grid min-h-screen lg:grid-cols-[1.05fr_0.95fr]">
+                <section className="hidden lg:flex flex-col justify-between bg-emerald-700 px-12 py-10 text-white">
+                    <FastWorkBrand light />
 
-            <div className="relative z-20 w-full max-w-lg mx-auto p-8 sm:p-12 bg-black/30 backdrop-blur-3xl rounded-3xl border border-amber-700/50 shadow-2xl shadow-red-950/50 transition-all duration-500 transform hover:scale-[1.02] animate-fade-in">
-                <div className="relative z-30 flex flex-col items-center text-center space-y-10">
-                    <div className="flex flex-col items-center space-y-3">
-                        <img
-                            className="w-36 h-36 rounded-full mb-1 shadow-xl border-4 border-amber-600  transform transition-all hover:scale-105"
-                            src={logo}
-                            alt="Al-Hamra Logo"
-                        />
-                        <h2 className="text-lg sm:text-xl md:text-2xl lg:text-2xl xl:text-2xl font-extrabold tracking-widest text-white uppercase text-center">
-                            Captcha Earning System
-                        </h2>
-                        <p className="text-sm font-light text-amber-500/80">
-                            Secure access to your earnings.
-                        </p>
-                    </div>
-
-                    <form onSubmit={handleLogin} className="w-full space-y-6">
-                        <div>
-                            <label htmlFor="email" className="block text-sm font-semibold text-amber-500 mb-2 tracking-wide text-left">
-                                EMAIL ADDRESS
-                            </label>
-                            <input
-                                type="email"
-                                id="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="w-full px-4 py-3 bg-white/10 border-b-2 border-red-900/50 rounded-lg text-white placeholder-gray-500 transition-all duration-300 focus:outline-none focus:bg-white/20 focus:border-amber-600"
-                                placeholder="user@example.com"
-                                required
-                            />
+                    <div className="max-w-xl">
+                        <div className="mb-8 grid grid-cols-3 gap-3">
+                            {['24/7', 'KYC', 'Chat'].map((label) => (
+                                <div key={label} className="rounded-lg border border-white/25 bg-white/15 px-4 py-3">
+                                    <div className="text-xl font-black text-white">{label}</div>
+                                    <div className="mt-1 h-1 w-10 rounded-full bg-amber-300"></div>
+                                </div>
+                            ))}
                         </div>
 
-                        <div className="relative">
-                            <label htmlFor="password" className="block text-sm font-semibold text-amber-500 mb-2 tracking-wide text-left">
-                                PASSWORD
-                            </label>
-                            <div className="relative">
-                                <input
-                                    type={passwordVisible ? "text" : "password"}
-                                    id="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full px-4 py-3 bg-white/10 border-b-2 border-red-900/50 rounded-lg text-white pr-10 placeholder-gray-500 transition-all duration-300 focus:outline-none focus:bg-white/20 focus:border-amber-600"
-                                    placeholder="••••••••"
-                                    required
-                                />
-                                <button
-                                    type="button"
-                                    onClick={togglePasswordVisibility}
-                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-amber-600 hover:text-amber-400 transition"
-                                    aria-label={passwordVisible ? "Hide password" : "Show password"}
-                                >
-                                    <FaEye className="text-amber-500 hover:text-amber-300" />
-                                </button>
+                        <h1 className="text-4xl font-black leading-tight tracking-normal">
+                            FastWork24 operations desk
+                        </h1>
+                        <p className="mt-4 max-w-md text-sm leading-6 text-emerald-50">
+                            Secure access for support, user verification, withdrawals, and earning workflow management.
+                        </p>
+
+                        <div className="mt-10 grid grid-cols-2 gap-4 text-sm">
+                            <div className="rounded-lg border border-white/25 bg-white/15 p-4">
+                                <div className="text-xs font-bold uppercase tracking-[0.18em] text-amber-100">Response</div>
+                                <div className="mt-2 text-2xl font-black">Live</div>
+                            </div>
+                            <div className="rounded-lg border border-white/25 bg-white/15 p-4">
+                                <div className="text-xs font-bold uppercase tracking-[0.18em] text-amber-100">Status</div>
+                                <div className="mt-2 text-2xl font-black">Online</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="text-xs font-semibold text-emerald-100">fastwork24.com</div>
+                </section>
+
+                <main className="flex min-h-screen items-center justify-center px-5 py-8 sm:px-8">
+                    <div className="w-full max-w-md rounded-lg border border-emerald-100 bg-white p-6 shadow-sm sm:p-8">
+                        <div className="mb-8">
+                            <FastWorkBrand />
+                            <div className="mt-8">
+                                <h2 className="text-2xl font-black tracking-normal text-emerald-950">Sign in</h2>
+                                <p className="mt-2 text-sm text-emerald-700">Use your FastWork24 admin credentials.</p>
                             </div>
                         </div>
 
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className={`w-full flex justify-center items-center py-3 rounded-xl shadow-2xl font-bold tracking-widest transition-all duration-300 transform mt-8 border-2 border-amber-600 ${
-                                loading
-                                    ? "bg-red-900/50 cursor-not-allowed text-gray-300"
-                                    : "bg-red-900 hover:bg-red-800 active:scale-[0.98] hover:shadow-amber-500/50"
-                            } text-white uppercase`}
-                        >
-                            {loading ? <Spinner /> : "SECURE LOGIN"}
-                        </button>
-                    </form>
-                </div>
+                        <form onSubmit={handleLogin} className="space-y-5">
+                            <div>
+                                <label htmlFor="email" className="mb-2 block text-xs font-black uppercase tracking-[0.16em] text-emerald-700">
+                                    Email address
+                                </label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="h-12 w-full rounded-lg border border-emerald-100 bg-emerald-50 px-4 text-emerald-950 outline-none transition placeholder:text-emerald-900/45 focus:border-emerald-600 focus:bg-white focus:ring-4 focus:ring-emerald-100"
+                                    placeholder="admin@fastwork24.com"
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <label htmlFor="password" className="mb-2 block text-xs font-black uppercase tracking-[0.16em] text-emerald-700">
+                                    Password
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type={passwordVisible ? "text" : "password"}
+                                        id="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        className="h-12 w-full rounded-lg border border-emerald-100 bg-emerald-50 px-4 pr-12 text-sm text-emerald-950 outline-none transition placeholder:text-emerald-900/45 focus:border-emerald-600 focus:bg-white focus:ring-4 focus:ring-emerald-100"
+                                        placeholder="Password"
+                                        required
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={togglePasswordVisibility}
+                                        className="absolute inset-y-0 right-0 flex w-12 items-center justify-center text-emerald-500 transition hover:text-emerald-700"
+                                        aria-label={passwordVisible ? "Hide password" : "Show password"}
+                                    >
+                                        <FaEye />
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className={`flex h-12 w-full items-center justify-center rounded-lg text-sm font-black uppercase tracking-[0.14em] text-white transition ${
+                                    loading
+                                        ? "bg-emerald-300 cursor-not-allowed"
+                                        : "bg-emerald-800 hover:bg-emerald-700 active:scale-[0.99]"
+                                }`}
+                            >
+                                {loading ? <Spinner /> : "Sign in"}
+                            </button>
+                        </form>
+                    </div>
+                </main>
             </div>
         </div>
     );
