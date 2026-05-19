@@ -10,6 +10,7 @@ import DataTable from "react-data-table-component";
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { formatDateTime } from "../../utils/Utils";
 
 import 'react-loading-skeleton/dist/skeleton.css';
 // --- API Configuration ---
@@ -87,7 +88,7 @@ const OrderModal = ({ data, isOpen, onClose }) => {
                </div>
                <div>
                  <p className="text-gray-500">Date</p>
-                 <p className="font-medium">{new Date(created_at).toLocaleDateString()}</p>
+                 <p className="font-medium">{formatDateTime(created_at)}</p>
                </div>
                <div>
                  <p className="text-gray-500">Category</p>
@@ -125,7 +126,7 @@ const OrderModal = ({ data, isOpen, onClose }) => {
                 </div>
                 <div>
                   <p className="text-blue-500">Paid At</p>
-                  <p className="font-medium">{new Date(payment.paid_at).toLocaleDateString()}</p>
+                  <p className="font-medium">{formatDateTime(payment.paid_at)}</p>
                 </div>
               </div>
             </div>

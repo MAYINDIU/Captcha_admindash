@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "../../partials/Sidebar";
 import Header from "../../partials/Header";
+import { formatDateTime } from "../../utils/Utils";
 
 // =========================
 // Icon Components (SVG)
@@ -25,10 +26,7 @@ const EyeIcon = () => (
 // =========================
 // Helper Functions
 // =========================
-const formatDate = (dateString) => 
-    dateString ? new Date(dateString).toLocaleDateString('en-US', { 
-        year: 'numeric', month: 'short', day: 'numeric'
-    }) : "N/A";
+const formatDate = (dateString) => dateString ? formatDateTime(dateString) : "N/A";
     
 const formatCurrency = (value) => 
     new Intl.NumberFormat('en-US', { 

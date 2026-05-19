@@ -6,6 +6,7 @@ import { Modal, Button } from "flowbite-react";
 import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "../../partials/Sidebar";
 import Header from "../../partials/Header";
+import { formatDateTime } from "../../utils/Utils";
 
 // ================= ICON COMPONENTS =================
 const EyeIcon = () => (
@@ -251,7 +252,7 @@ const NoticeListEmployee = () => {
                                                         </td>
                                                         <td className="px-6 py-4 text-sm text-gray-800 dark:text-white">{ann.title}</td>
                                                         <td className="px-6 py-4 text-sm text-gray-600 dark:text-white">{ann.creator_name}</td>
-                                                        <td className="px-6 py-4 text-sm text-gray-600 dark:text-white whitespace-nowrap">{new Date(ann.created_at).toLocaleDateString()}</td>
+                                                        <td className="px-6 py-4 text-sm text-gray-600 dark:text-white whitespace-nowrap">{formatDateTime(ann.created_at)}</td>
                                                         <td className="px-6 py-4 whitespace-nowrap">
                                                             <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
                                                                 ann.is_read

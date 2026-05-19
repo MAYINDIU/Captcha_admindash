@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 // Assuming these are your layout components and their paths are correct
 import Sidebar from "../../partials/Sidebar";
 import Header from "../../partials/Header";
+import { formatDateTime } from "../../utils/Utils";
 
 // =========================================================================
 // 1. ICON COMPONENTS
@@ -474,7 +475,7 @@ window.updateInput = (select, inputId) => {
         `;
 
         // Format dates for display
-        const formatDate = (dateString) => dateString ? new Date(dateString).toLocaleDateString() : null;
+        const formatDate = (dateString) => dateString ? formatDateTime(dateString) : null;
 
         Swal.fire({
             customClass: {
@@ -667,7 +668,7 @@ window.updateInput = (select, inputId) => {
                                                             </span>
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                            {new Date(customer.created_at).toLocaleDateString()}
+                                                            {formatDateTime(customer.created_at)}
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                                             <div className="flex items-center justify-center space-x-2">

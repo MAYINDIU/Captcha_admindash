@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { formatDateTime } from "../../utils/Utils";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
@@ -261,7 +262,7 @@ const VerificationList = () => {
                               </span>
                             </td>
                             <td className="px-6 py-4 text-xs font-bold text-slate-400">
-                              {item.submitted_at ? new Date(item.submitted_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A'}
+                              {item.submitted_at ? formatDateTime(item.submitted_at) : 'N/A'}
                             </td>
                             <td className="px-6 py-4 text-center">
                               <div className="flex justify-center gap-2">

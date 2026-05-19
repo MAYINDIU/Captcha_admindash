@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { formatDateTime } from "../../utils/Utils";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
@@ -16,6 +17,7 @@ const Icon = ({ children, className = "h-5 w-5" }) => (
 );
 const PlusIcon = () => ( <Icon><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></Icon> );
 const EditIcon = () => ( <Icon><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-7 1l4-4m-9 9h9" /></Icon> );
+const CalendarIcon = () => ( <Icon><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z" /></Icon> );
 const DeleteIcon = () => ( <Icon><path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></Icon> );
 const EyeIcon = () => ( <Icon><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.065 7-9.542 7s-8.268-2.943-9.542-7z" /></Icon> );
 const XIcon = () => ( <Icon className="h-6 w-6"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></Icon> );
@@ -32,6 +34,22 @@ const formatToTk = (amount) => {
     minimumFractionDigits: 0,
   }).format(numericAmount).replace("BDT", "Tk");
 };
+
+const toDateTimeLocalValue = (rawValue) => {
+  if (!rawValue) return "";
+
+  const date = new Date(rawValue);
+  if (Number.isNaN(date.getTime())) return "";
+
+  const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  return localDate.toISOString().slice(0, 16);
+};
+
+const getWithdrawalDisplayDate = (withdrawal) =>
+  withdrawal?.processed_at ||
+  withdrawal?.payment_date_time ||
+  withdrawal?.requested_at ||
+  withdrawal?.created_at;
 
 const SkeletonPulse = ({ className }) => <div className={`animate-pulse bg-gray-200 rounded ${className}`}></div>;
 
@@ -119,8 +137,77 @@ const WithdrawalReviewModal = ({ withdrawal, onClose }) => {
                 </>
               )}
               {(status === 'paid' || status === 'rejected') && (
-                <div className="w-full py-2 bg-gray-100 text-gray-500 text-center rounded text-xs font-bold italic uppercase"> Log is {status} (Finalized) </div>
+                <div className="w-full py-2 bg-gray-100 text-gray-500 text-center rounded text-xs font-bold italic uppercase"> Finalized entry. Date and notes can still be adjusted. </div>
               )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const WithdrawalDateModal = ({ withdrawal, onClose }) => {
+  const queryClient = useQueryClient();
+  const token = localStorage.getItem("authToken");
+  const API_BASE = "https://fastwork24.com/captcha_backend/public/api";
+  const [processedAt, setProcessedAt] = useState(
+    toDateTimeLocalValue(withdrawal?.processed_at || withdrawal?.payment_date_time || withdrawal?.requested_at || withdrawal?.created_at)
+  );
+
+  const dateMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`${API_BASE}/admin/withdrawals/${withdrawal.id}/update-date`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ processed_at: processedAt || undefined }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Date update failed");
+      return data;
+    },
+    onSuccess: (data) => {
+      toast.success(data.message || "Date updated successfully");
+      queryClient.invalidateQueries(["withdrawals"]);
+      onClose();
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  return (
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-gray-900/60 p-4">
+      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full relative overflow-hidden">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-6 border-b pb-3">
+            <h2 className="text-xl font-bold text-gray-900">Update Date #{withdrawal.id}</h2>
+            <button onClick={onClose} className="text-gray-400 hover:text-red-500 transition-colors"><XIcon /></button>
+          </div>
+          <div className="space-y-4">
+            <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
+              <p className="text-[10px] text-indigo-600 font-bold uppercase tracking-widest mb-1">Current Entry</p>
+              <p className="text-sm font-bold text-gray-800">
+                {withdrawal?.user?.name || "Unknown User"} {withdrawal?.user?.username ? `(@${withdrawal.user.username})` : ""}
+              </p>
+              <p className="text-xs text-gray-600 mt-1">Status: <span className="font-bold uppercase">{withdrawal?.status || "N/A"}</span></p>
+              <p className="text-xs text-gray-600">Shown Date: {formatDateTime(withdrawal?.processed_at || withdrawal?.payment_date_time || withdrawal?.requested_at || withdrawal?.created_at)}</p>
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-gray-500 uppercase">New Date & Time</label>
+              <input
+                type="datetime-local"
+                value={processedAt}
+                onChange={(e) => setProcessedAt(e.target.value)}
+                className="w-full mt-1 p-2 border border-indigo-200 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+              />
+            </div>
+            <p className="text-[11px] text-amber-600 font-medium">
+              Save action requires backend support for a dedicated withdrawal date update endpoint.
+            </p>
+            <div className="flex gap-3 pt-2">
+              <button onClick={onClose} className="flex-1 bg-gray-100 text-gray-700 py-2.5 rounded-lg text-xs font-bold hover:bg-gray-200 transition">Cancel</button>
+              <button onClick={() => dateMutation.mutate()} disabled={dateMutation.isPending} className="flex-1 bg-indigo-600 text-white py-2.5 rounded-lg text-xs font-bold hover:bg-indigo-700 transition disabled:opacity-50">
+                {dateMutation.isPending ? "Saving..." : "Save Date"}
+              </button>
             </div>
           </div>
         </div>
@@ -244,6 +331,7 @@ const WithdrawallistTrn = () => {
   const [transPage, setTransPage] = useState(1);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
+  const [showDateModal, setShowDateModal] = useState(false);
   const [selectedWithdrawal, setSelectedWithdrawal] = useState(null);
   const [showTransactionDetailsModal, setShowTransactionDetailsModal] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
@@ -347,6 +435,11 @@ const WithdrawallistTrn = () => {
   const handleReviewWithdrawal = (withdrawal) => {
     setSelectedWithdrawal(withdrawal);
     setShowReviewModal(true);
+  };
+
+  const handleEditWithdrawalDate = (withdrawal) => {
+    setSelectedWithdrawal(withdrawal);
+    setShowDateModal(true);
   };
 
   const handleViewTransactionDetails = (transaction) => {
@@ -480,13 +573,12 @@ const WithdrawallistTrn = () => {
                             }`}>{item.status}</span>
                           </td>
                           <td className="px-6 py-4 text-xs text-gray-500 font-medium">
-                            {item.requested_at ? new Date(item.requested_at).toLocaleDateString() : 'N/A'}
+                            {getWithdrawalDisplayDate(item) ? formatDateTime(getWithdrawalDisplayDate(item)) : 'N/A'}
                           </td>
                           <td className="px-6 py-4 text-right space-x-2 whitespace-nowrap">
                             <button onClick={() => handleViewDetails(item.user)} className="text-blue-600 bg-blue-50 p-2 rounded-full hover:bg-blue-600 hover:text-white transition shadow-sm"><EyeIcon /></button>
-                            {(item.status?.toLowerCase() === 'pending' || item.status?.toLowerCase() === 'approved') && (
-                              <button onClick={() => handleReviewWithdrawal(item)} className="text-indigo-600 bg-indigo-50 p-2 rounded-full hover:bg-indigo-600 hover:text-white transition shadow-sm"><EditIcon /></button>
-                            )}
+                            <button onClick={() => handleReviewWithdrawal(item)} className="text-indigo-600 bg-indigo-50 p-2 rounded-full hover:bg-indigo-600 hover:text-white transition shadow-sm"><EditIcon /></button>
+                            <button onClick={() => handleEditWithdrawalDate(item)} className="text-amber-600 bg-amber-50 p-2 rounded-full hover:bg-amber-500 hover:text-white transition shadow-sm"><CalendarIcon /></button>
                             <button onClick={() => handleDelete(item.id)} className="text-red-600 bg-red-50 p-2 rounded-full hover:bg-red-600 hover:text-white transition shadow-sm"><DeleteIcon /></button>
                           </td>
                         </tr>
@@ -607,9 +699,10 @@ const WithdrawallistTrn = () => {
           </div>
 
           {/* Modals */}
-          {showDetailsModal && selectedUser && <UserDetailsModal user={selectedUser} onClose={() => setShowDetailsModal(false)} />}
-          {showReviewModal && selectedWithdrawal && <WithdrawalReviewModal withdrawal={selectedWithdrawal} onClose={() => setShowReviewModal(false)} />}
-          {showTransactionDetailsModal && selectedTransaction && <TransactionDetailsModal transaction={selectedTransaction} onClose={() => setShowTransactionDetailsModal(false)} />}
+          {showDetailsModal && selectedUser && <UserDetailsModal user={selectedUser} onClose={() => { setShowDetailsModal(false); setSelectedUser(null); }} />}
+          {showReviewModal && selectedWithdrawal && <WithdrawalReviewModal withdrawal={selectedWithdrawal} onClose={() => { setShowReviewModal(false); setSelectedWithdrawal(null); }} />}
+          {showDateModal && selectedWithdrawal && <WithdrawalDateModal withdrawal={selectedWithdrawal} onClose={() => { setShowDateModal(false); setSelectedWithdrawal(null); }} />}
+          {showTransactionDetailsModal && selectedTransaction && <TransactionDetailsModal transaction={selectedTransaction} onClose={() => { setShowTransactionDetailsModal(false); setSelectedTransaction(null); }} />}
         </main>
       </div>
     </div>

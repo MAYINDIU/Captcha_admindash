@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import Sidebar from "../../partials/Sidebar";
 import Header from "../../partials/Header";
+import { formatDateTime } from "../../utils/Utils";
 
 // ================= ICONS =================
 const Icon = ({ children, className = "h-5 w-5" }) => (
@@ -57,7 +58,7 @@ const CaptchaDetailsModal = ({ item, onClose }) => (
             </div>
             <div className="bg-gray-50 p-2 rounded">
               <span className="text-[10px] uppercase text-gray-500 block">Created</span>
-              <span className="font-bold text-[10px]">{new Date(item.created_at).toLocaleDateString()}</span>
+              <span className="font-bold text-[10px]">{formatDateTime(item.created_at)}</span>
             </div>
           </div>
           <div>

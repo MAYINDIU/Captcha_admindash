@@ -9,6 +9,7 @@ import {
 import "react-toastify/dist/ReactToastify.css";
 import Sidebar from "../../partials/Sidebar";
 import Header from "../../partials/Header";
+import { formatDateTime } from "../../utils/Utils";
 
 const AgentPaymentSettelement = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -158,7 +159,7 @@ const AgentPaymentSettelement = () => {
                                         ) : data?.data?.map((item) => (
                                             <tr key={item.id} className="hover:bg-indigo-50/30 transition-colors">
                                                 <td className="px-6 py-4 text-xs text-slate-500">
-                                                    {new Date(item.created_at).toLocaleDateString()}
+                                                    {formatDateTime(item.created_at)}
                                                 </td>
                                                 <td className="px-6 py-4 text-sm font-bold text-slate-700">{item.reference_no}</td>
                                                 <td className="px-6 py-4 font-black text-slate-900">৳{parseFloat(item.amount).toLocaleString()}</td>

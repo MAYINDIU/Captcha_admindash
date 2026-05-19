@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 // Components (Assuming these are available)
 import Sidebar from "../../partials/Sidebar";
 import Header from "../../partials/Header";
+import { formatDateTime } from "../../utils/Utils";
 
 // ================= ICONS =================
 // Simplified icon usage for professionalism
@@ -595,26 +596,7 @@ const Alluser = () => {
                            <td className="px-6 py-3 whitespace-nowrap">
                             <div className="flex flex-col">
                                 <span className="text-xs font-medium text-gray-800">
-                                  {item.created_at
-                                    ? new Date(item.created_at)
-                                        .toLocaleDateString("en-GB", {
-                                          day: "2-digit",
-                                          month: "short",
-                                          year: "numeric",
-                                        })
-                                        .replace(/ /g, "-")
-                                    : "N/A"}
-                                </span>
-
-                                <span className="text-[11px] text-indigo-600">
-                                  {item.created_at
-                                    ? new Date(item.created_at).toLocaleTimeString("en-US", {
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                        second: "2-digit",
-                                        hour12: true,
-                                      })
-                                    : ""}
+                                  {item.created_at ? formatDateTime(item.created_at) : "N/A"}
                                 </span>
 
                               

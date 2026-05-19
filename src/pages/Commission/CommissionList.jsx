@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Datepicker from 'flowbite-datepicker/Datepicker';
+import { formatDateTime } from "../../utils/Utils";
 
 // Assuming these are your components for layout
 import Sidebar from "../../partials/Sidebar";
@@ -84,10 +85,7 @@ const CommissionCalculationList = () => {
     
     const getDetail = (value) => value || "N/A";
 
-    const formatDate = (dateString) => 
-        dateString ? new Date(dateString).toLocaleDateString('en-US', { 
-            year: 'numeric', month: 'short', day: 'numeric'
-        }) : "N/A";
+    const formatDate = (dateString) => dateString ? formatDateTime(dateString) : "N/A";
 
     // ===================================
     // 1. Data Fetching

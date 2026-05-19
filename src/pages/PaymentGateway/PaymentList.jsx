@@ -15,6 +15,7 @@ import {
 // Partial Components (Assumed existing)
 import Sidebar from "../../partials/Sidebar";
 import Header from "../../partials/Header";
+import { formatDateTime } from "../../utils/Utils";
 
 // --- Design Utils ---
 
@@ -27,9 +28,7 @@ const formatCurrency = (amount) =>
 
 const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
-    return new Date(dateString.split('T')[0]).toLocaleDateString('en-GB', {
-        day: '2-digit', month: 'short', year: 'numeric'
-    });
+    return formatDateTime(dateString, 'en-GB');
 };
 
 // --- Professional UI Components ---

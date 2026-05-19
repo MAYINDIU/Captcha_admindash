@@ -7,6 +7,7 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { FiChevronDown, FiChevronUp, FiTrash2 } from 'react-icons/fi';
 import Swal from 'sweetalert2';
 import axios from 'axios'; 
+import { formatDateTime } from '../../utils/Utils';
 
 // --- Configuration ---
 const API_BASE = "https://alhamarahomesbd.com/alhamra-backend/public/api/v1/accounting";
@@ -65,7 +66,7 @@ const JournalRow = ({ journal }) => {
                     </div>
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200 font-medium">{journal.description}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{new Date(journal.occurred_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{formatDateTime(journal.occurred_at)}</td>
                 
                 {/* Total Debit and Credit columns */}
                 <td className="px-6 py-4 text-sm text-right font-bold font-mono text-blue-800 dark:text-blue-300">

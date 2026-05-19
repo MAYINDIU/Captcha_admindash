@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 // Assuming these are your components for layout
 import Sidebar from "../../partials/Sidebar";
 import Header from "../../partials/Header";
+import { formatDateTime } from "../../utils/Utils";
 
 // =========================
 // Icon Components (SVG)
@@ -79,10 +80,7 @@ const SupplierPayable = () => {
 
     const getDetail = (value) => value || "N/A";
 
-    const formatDate = (dateString) =>
-        dateString ? new Date(dateString).toLocaleDateString('en-US', {
-            year: 'numeric', month: 'short', day: 'numeric'
-        }) : "N/A";
+    const formatDate = (dateString) => dateString ? formatDateTime(dateString) : "N/A";
         
     const formatDateTimeForAPI = (date) => 
         date.toISOString().slice(0, 19).replace('T', ' ');

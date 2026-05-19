@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Sidebar from "../../partials/Sidebar";
 import Header from "../../partials/Header";
+import { formatDateTime } from "../../utils/Utils";
 import { useNavigate } from "react-router-dom";
 import {
     AiOutlinePlus,
@@ -580,7 +581,7 @@ const Employeelist = () => {
                                         <DetailRow icon={AiOutlineIdcard} label="National ID" value={viewEmployee.national_id} />
                                     </div>
                                     <div className="col-span-1">
-                                        <DetailRow icon={AiOutlineCalendar} label="Created On" value={new Date(viewEmployee.created_at).toLocaleDateString()} />
+                                        <DetailRow icon={AiOutlineCalendar} label="Created On" value={formatDateTime(viewEmployee.created_at)} />
                                     </div>
                                 </div>
 

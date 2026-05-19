@@ -6,6 +6,7 @@ import Header from '../../partials/Header';
 import { FiFilter, FiPrinter, FiDownload } from 'react-icons/fi';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import { formatDateTime } from '../../utils/Utils';
 
 const LedgerReport = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -125,7 +126,7 @@ const LedgerReport = () => {
     
         reportSummary.processedEntries.forEach(entry => {
             const entryData = [
-                new Date(entry.occurred_at).toLocaleDateString(),
+                formatDateTime(entry.occurred_at),
                 entry.journal?.description || '---',
                 entry.tx_id,
                 Number(entry.debit) > 0 ? formatCurrency(entry.debit) : '',
@@ -242,7 +243,7 @@ const LedgerReport = () => {
                                             </tr>
                                             {reportSummary.processedEntries.map(entry => (
                                                 <tr key={entry.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{new Date(entry.occurred_at).toLocaleDateString()}</td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{formatDateTime(entry.occurred_at)}</td>
                                                     <td className="px-6 py-4 text-sm text-gray-800 dark:text-gray-200">{entry.journal?.description || '---'}</td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400 font-mono">{entry.tx_id}</td>
                                                     <td className="px-6 py-4 text-right text-sm font-mono">{Number(entry.debit) > 0 ? formatCurrency(entry.debit) : '-'}</td>
