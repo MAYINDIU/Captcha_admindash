@@ -7,7 +7,7 @@ const appDownloadUrl = "/downloads/captcha.apk";
 const steps = [
   "অ্যাপ ডাউনলোড করে অ্যাকাউন্টে লগইন করুন",
   "দৈনিক কাজ/ক্যাপচা টাস্ক সম্পন্ন করুন",
-  "ওয়ালেট ব্যালেন্স, কমিশন ও পেমেন্ট হিস্ট্রি দেখুন",
+  "ওয়ালেট ব্যালেন্স, কমিশন ও পেমেন্ট হিস্ট্রি দেখুন",
   "প্রয়োজনে সাপোর্ট চ্যাটে মেসেজ পাঠান",
 ];
 
@@ -20,12 +20,12 @@ const features = [
   {
     icon: FiClock,
     title: "২৪/৭ অ্যাক্সেস",
-    text: "যেকোনো সময় অ্যাকাউন্টে ঢুকে কাজের অবস্থা যাচাই করা যাবে।",
+    text: "যেকোনো সময় অ্যাকাউন্টে ঢুকে কাজের অবস্থা যাচাই করা যাবে।",
   },
   {
     icon: FiShield,
     title: "ভেরিফিকেশন",
-    text: "প্রোফাইল, নিরাপত্তা ও প্রয়োজনীয় তথ্য যাচাই করা সহজ হবে।",
+    text: "প্রোফাইল, নিরাপত্তা ও প্রয়োজনীয় তথ্য যাচাই করা সহজ হবে।",
   },
   {
     icon: FiMessageCircle,
@@ -62,30 +62,29 @@ const FastWorkHome = () => {
                 কাজ, ব্যালেন্স ও সাপোর্ট এখন এক অ্যাপে
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-8 text-emerald-50">
-                প্রিয় গ্রাহক,
-                আপনি কি অনলাইনে পার্ট-টাইম কাজ করে আয় করতে আগ্রহী?
-
-                তাহলে এখনই আমাদের অ্যাপটি ডাউনলোড করে একটি একাউন্ট তৈরি করুন। 
+                প্রিয় গ্রাহক, আপনি কি অনলাইনে পার্ট-টাইম কাজ করে আয় করতে আগ্রহী?
+                তাহলে এখনই আমাদের অ্যাপটি ডাউনলোড করে একটি একাউন্ট তৈরি করুন।
                 এরপর আপনার ইউজারনেম ও পাসওয়ার্ড দিয়ে লগইন করে সাপোর্ট টিমে মেসেজ দিন।
-                আমাদের সাপোর্ট টিম আপনাকে কাজের সম্পূর্ণ নির্দেশনা বুঝিয়ে দেবে।
-                ধন্যবাদ।
+                আমাদের সাপোর্ট টিম আপনাকে কাজের সম্পূর্ণ নির্দেশনা বুঝিয়ে দেবে। ধন্যবাদ।
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                {/* <a
-                  href={appDownloadUrl}
-                  download
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-amber-300 px-6 text-sm font-black uppercase tracking-[0.12em] text-emerald-950 transition hover:bg-amber-200"
-                >
-                  <FiDownload className="h-5 w-5" />
-                  Android App
-                </a> */}
                 <a
                   href="#how-it-works"
                   className="inline-flex h-12 items-center justify-center rounded-lg border border-white/35 px-6 text-sm font-black text-white transition hover:border-amber-200 hover:bg-white/10"
                 >
-                  কীভাবে কাজ করবে
+                  কিভাবে কাজ করবে
                 </a>
+              </div>
+
+              <div className="mt-8 max-w-2xl">
+                <h3 className="text-2xl font-black tracking-normal text-white">
+                  🎁 রেফার করুন, আয় করুন!
+                </h3>
+                <p className="mt-3 text-base leading-8 text-emerald-50">
+                  আপনার পরিচিত বন্ধু বা পরিবারের সদস্যদের অ্যাপে যুক্ত করুন এবং প্রতিটি সফল রেফারেলে আকর্ষণীয় বোনাস পান।
+                  একসাথে কাজ করুন, একসাথে আয় করুন।
+                </p>
               </div>
             </div>
 
@@ -125,28 +124,11 @@ const FastWorkHome = () => {
           </div>
         </section>
 
-        {/* <section id="download" className="border-y border-amber-400 bg-amber-300 text-emerald-950">
-          <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-5 px-5 py-8 md:flex-row md:items-center">
-            <div>
-              <h2 className="text-2xl font-black tracking-normal">FastWork24 অ্যাপ ডাউনলোড করুন</h2>
-              <p className="mt-2 text-sm text-emerald-800">Android মোবাইল থেকে সরাসরি অ্যাপ ইনস্টল করা যাবে।</p>
-            </div>
-            <a
-              href={appDownloadUrl}
-              download
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-emerald-800 px-6 text-sm font-black uppercase tracking-[0.12em] text-white transition hover:bg-emerald-700"
-            >
-              <FiDownload className="h-5 w-5" />
-              Download APK
-            </a>
-          </div>
-        </section> */}
-
         <section className="mx-auto max-w-6xl px-5 py-14">
           <div className="mb-8 max-w-2xl">
             <h2 className="text-3xl font-black tracking-normal">ব্যবহারকারীরা কী করতে পারবেন</h2>
             <p className="mt-3 text-sm leading-7 text-emerald-800">
-              FastWork24 অ্যাপ ব্যবহারকারীর দৈনন্দিন কাজ, আয় এবং সাপোর্ট ব্যবস্থাপনাকে সহজ করে।
+              FastWork24 অ্যাপ ব্যবহারকারীদের দৈনন্দিন কাজ, আয় এবং সাপোর্ট ব্যবস্থাপনাকে সহজ করে।
             </p>
           </div>
 
