@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { formatDateTime } from "../../utils/Utils";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import Swal from "sweetalert2";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -18,7 +17,6 @@ const Icon = ({ children, className = "h-5 w-5" }) => (
 const PlusIcon = () => ( <Icon><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></Icon> );
 const EditIcon = () => ( <Icon><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-7 1l4-4m-9 9h9" /></Icon> );
 const CalendarIcon = () => ( <Icon><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z" /></Icon> );
-const DeleteIcon = () => ( <Icon><path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></Icon> );
 const EyeIcon = () => ( <Icon><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.065 7-9.542 7s-8.268-2.943-9.542-7z" /></Icon> );
 const XIcon = () => ( <Icon className="h-6 w-6"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></Icon> );
 const InfoIcon = () => ( <Icon className="h-4 w-4 mr-2"><path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></Icon> );
@@ -400,33 +398,6 @@ const WithdrawallistTrn = () => {
     enabled: !!token,
   });
 
-  const deleteMutation = useMutation({
-    mutationFn: async (id) => {
-      const res = await fetch(`${API_BASE}/admin/withdrawals/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) throw new Error("Failed to delete.");
-      return id;
-    },
-    onSuccess: () => {
-      toast.success("Deleted successfully!");
-      queryClient.invalidateQueries(["withdrawals"]);
-    },
-  });
-
-  const handleDelete = async (id) => {
-    const confirm = await Swal.fire({
-      title: "Are you sure?",
-      text: "This record will be permanently deleted.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#EF4444",
-      confirmButtonText: "Yes, delete it!",
-    });
-    if (confirm.isConfirmed) deleteMutation.mutate(id);
-  };
-
   const handleViewDetails = (user) => {
     setSelectedUser(user);
     setShowDetailsModal(true);
@@ -579,7 +550,6 @@ const WithdrawallistTrn = () => {
                             <button onClick={() => handleViewDetails(item.user)} className="text-blue-600 bg-blue-50 p-2 rounded-full hover:bg-blue-600 hover:text-white transition shadow-sm"><EyeIcon /></button>
                             <button onClick={() => handleReviewWithdrawal(item)} className="text-indigo-600 bg-indigo-50 p-2 rounded-full hover:bg-indigo-600 hover:text-white transition shadow-sm"><EditIcon /></button>
                             <button onClick={() => handleEditWithdrawalDate(item)} className="text-amber-600 bg-amber-50 p-2 rounded-full hover:bg-amber-500 hover:text-white transition shadow-sm"><CalendarIcon /></button>
-                            <button onClick={() => handleDelete(item.id)} className="text-red-600 bg-red-50 p-2 rounded-full hover:bg-red-600 hover:text-white transition shadow-sm"><DeleteIcon /></button>
                           </td>
                         </tr>
                       ))}

@@ -425,12 +425,12 @@ const Chat = () => {
   const activeChat = chats.find(c => c.user_id === selectedUserId);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
+    <div className="flex h-screen min-h-[100dvh] overflow-hidden bg-gray-50">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
       
-      <div className="relative flex flex-col flex-1 overflow-hidden">
+      <div className="relative flex min-h-0 flex-col flex-1 overflow-hidden">
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <main className="flex grow overflow-hidden relative">
+        <main className="relative flex h-[calc(100dvh-4rem)] min-h-0 grow overflow-hidden md:h-auto">
           <ToastContainer position="top-right" theme="colored" />
 
           {/* Inbox Sidebar */}
@@ -530,7 +530,7 @@ const Chat = () => {
           </div>
 
           {/* Chat Window */}
-          <div className={`${selectedUserId ? 'flex' : 'hidden md:flex'} flex-1 flex-col bg-slate-100 h-full overflow-hidden`}>
+          <div className={`${selectedUserId ? 'flex' : 'hidden md:flex'} flex-1 min-h-0 flex-col bg-slate-100 h-full overflow-hidden`}>
             {selectedUserId ? (
               <>
                 {/* Header */}
@@ -567,7 +567,7 @@ const Chat = () => {
                 <div
                   ref={messagesContainerRef}
                   onScroll={handleMessagesScroll}
-                  className="flex-1 overflow-y-auto p-4 md:p-6 flex flex-col-reverse"
+                  className="flex flex-1 flex-col-reverse overflow-y-auto p-4 pb-24 md:p-6 md:pb-6"
                 >
                   {processedMessages.map((item) => (
                     item.type === 'unread_divider' ? (
@@ -636,7 +636,11 @@ const Chat = () => {
                 </div>
 
                 {/* Input Form */}
-                <form onSubmit={handleSendReply} className="p-4 bg-white border-t border-gray-200">
+                <form
+                  onSubmit={handleSendReply}
+                  className="sticky bottom-0 z-20 border-t border-gray-200 bg-white p-4"
+                  style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
+                >
                   <div className="flex items-center space-x-2 max-w-5xl mx-auto">
                     <input
                       type="text"
