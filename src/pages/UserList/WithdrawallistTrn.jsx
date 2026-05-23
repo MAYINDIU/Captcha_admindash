@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import { formatDateTime } from "../../utils/Utils";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ToastContainer, toast } from "react-toastify";
+import Swal from "sweetalert2";
 import "react-toastify/dist/ReactToastify.css";
 
 // Components
@@ -18,6 +19,7 @@ const PlusIcon = () => ( <Icon><path strokeLinecap="round" strokeLinejoin="round
 const EditIcon = () => ( <Icon><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-7 1l4-4m-9 9h9" /></Icon> );
 const CalendarIcon = () => ( <Icon><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z" /></Icon> );
 const EyeIcon = () => ( <Icon><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.065 7-9.542 7s-8.268-2.943-9.542-7z" /></Icon> );
+const DeleteIcon = () => ( <Icon><path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></Icon> );
 const XIcon = () => ( <Icon className="h-6 w-6"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></Icon> );
 const InfoIcon = () => ( <Icon className="h-4 w-4 mr-2"><path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></Icon> );
 const PowerIcon = () => ( <Icon className="h-5 w-5 mr-2"><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></Icon> );
@@ -398,6 +400,29 @@ const WithdrawallistTrn = () => {
     enabled: !!token,
   });
 
+  const deleteWithdrawalMutation = useMutation({
+    mutationFn: async (withdrawalId) => {
+      const res = await fetch(`${API_BASE}/admin/withdrawals/${withdrawalId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
+      });
+
+      const contentType = res.headers.get("content-type") || "";
+      const data = contentType.includes("application/json")
+        ? await res.json()
+        : { message: await res.text() };
+
+      if (!res.ok) throw new Error(data.message || "Failed to delete withdrawal");
+      return data;
+    },
+    onSuccess: (data) => {
+      toast.success(data.message || "Withdrawal deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["withdrawals"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
   const handleViewDetails = (user) => {
     setSelectedUser(user);
     setShowDetailsModal(true);
@@ -411,6 +436,22 @@ const WithdrawallistTrn = () => {
   const handleEditWithdrawalDate = (withdrawal) => {
     setSelectedWithdrawal(withdrawal);
     setShowDateModal(true);
+  };
+
+  const handleDeleteWithdrawal = async (withdrawal) => {
+    const result = await Swal.fire({
+      title: `Delete withdrawal #${withdrawal.id}?`,
+      text: "This will permanently remove this withdrawal request.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#e11d48",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+      deleteWithdrawalMutation.mutate(withdrawal.id);
+    }
   };
 
   const handleViewTransactionDetails = (transaction) => {
@@ -550,6 +591,14 @@ const WithdrawallistTrn = () => {
                             <button onClick={() => handleViewDetails(item.user)} className="text-blue-600 bg-blue-50 p-2 rounded-full hover:bg-blue-600 hover:text-white transition shadow-sm"><EyeIcon /></button>
                             <button onClick={() => handleReviewWithdrawal(item)} className="text-indigo-600 bg-indigo-50 p-2 rounded-full hover:bg-indigo-600 hover:text-white transition shadow-sm"><EditIcon /></button>
                             <button onClick={() => handleEditWithdrawalDate(item)} className="text-amber-600 bg-amber-50 p-2 rounded-full hover:bg-amber-500 hover:text-white transition shadow-sm"><CalendarIcon /></button>
+                            <button
+                              onClick={() => handleDeleteWithdrawal(item)}
+                              disabled={deleteWithdrawalMutation.isPending}
+                              title="Delete Withdrawal"
+                              className="text-rose-600 bg-rose-50 p-2 rounded-full hover:bg-rose-600 hover:text-white transition shadow-sm disabled:opacity-50"
+                            >
+                              <DeleteIcon />
+                            </button>
                           </td>
                         </tr>
                       ))}
